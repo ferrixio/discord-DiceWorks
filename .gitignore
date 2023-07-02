@@ -1,0 +1,10 @@
+*.env
+*.txt
+vuoto*
+.*/
+__*/
+venv/
+env/
+*.docx
+test*
+roba*
