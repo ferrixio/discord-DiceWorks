@@ -185,9 +185,9 @@ class ServerUtilities:
 
     def loli() -> str:
         """Function that returns a random answer for !loli"""
-        return choice("https://cdn.discordapp.com/attachments/862702344395423810/864624192942899240/mayo-fbi.png",
+        return choice(("https://cdn.discordapp.com/attachments/862702344395423810/864624192942899240/mayo-fbi.png",
                "https://cdn.discordapp.com/attachments/862702344395423810/912078312472473661/cystal_lizard1.png",
-               "https://cdn.discordapp.com/attachments/862702344395423810/912078308391387156/angry_big_lizard.png")
+               "https://cdn.discordapp.com/attachments/862702344395423810/912078308391387156/angry_big_lizard.png"))
 
     def master(username:str,user_id:int) -> str:
         """Helping function to message "master" (it's a pseudo-ping-pong command)"""
