@@ -1,5 +1,5 @@
 #### Dice Generator for Discord ####
-#©Samuele Ferri 2023      Bot version: 3.2
+#©Samuele Ferri 2023      Bot version: 3.2.1
 
 import discord
 from discord.ext import commands
@@ -125,16 +125,18 @@ async def stats(ctx, arg):
     """Command to generate stats for dnd 5e"""
 
     try:
-        text=""
-        R,S=DB.stats(int(arg))
+        text = ""
+        R,S = DB.stats(int(arg))
         for i in R:
-            text=text+i
-            copy=i.split('\t')   #looking for 18 & 3. Char " x" is needed because of the nature of command split
-            text=text+("\t :four_leaf_clover:")*(copy[1] == " 18")+("\t :broken_heart:")*(copy[1] == " 3")+"\n"
-        await ctx.channel.send(f'{ctx.message.author.global_name}, queste sono le stats che mi hai chiesto (è già stato rimosso il dado col valore più basso)')
-        await ctx.channel.send(text)
+            text += i
+            copy = i.split('\t')   #looking for 18 & 3. Char " x" is needed because of the nature of command split 
+            text = text + ("\t :four_leaf_clover:")*(copy[1] == " 18") + ("\t :broken_heart:")*(copy[1] == " 3") + "\n"
+        
+        await ctx.channel.send(f"{ctx.message.author.global_name}, queste sono le stats che mi hai chiesto" + 
+                               f" (è già stato rimosso il dado col valore più basso)\n" + text)
+
         if S:
-            await ctx.channel.send(f'La deviazione standard delle tue stats è {S}')
+            await ctx.channel.send(f'La distanza dalla serie standard è {S}')
 
     except:
         await ctx.channel.send("Type error")

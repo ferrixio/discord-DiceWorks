@@ -1,6 +1,7 @@
-#©Samuele Ferri (@ferrixio) 2023      Bot version: 3.2
+#©Samuele Ferri (@ferrixio) 2023      Bot version: 3.2.1
 
 from random import randint
+from math import floor
 
 kill_terms = ("I can roll al least 64 dice simultaneously",
               "255 is the maximal amplitude of the die",
@@ -243,17 +244,13 @@ class diceBlock:
         for i in range(0,amount):
             stats = diceBlock.roll(4,6,True)
             remainingValues = stats.pop(stats.index(min(stats)))  #remove min value of stats
-            output.append(f'Stat {i+1}: `{stats+[remainingValues]}`\t {sum(stats)}')
+            output.append(f"Stat {i+1}:\t`{stats+[remainingValues]}`\t{sum(stats)}\t{floor((sum(stats)-10)/2)}")
             serie.append(sum(stats))
 
         # if someone wanted to know the variance from the standard series (only in !stats 6)
         if amount == 6:
-            from math import sqrt
-            stdSeries, var = (15,14,13,12,10,8), 0
-            for i in range(amount):
-                var += (serie[i] - stdSeries[i])**2
-
-            return output,round(sqrt(var/amount),4)
+            stdSeries = (15,14,13,12,10,8)
+            return output,sum(serie)-sum(stdSeries)
 
         return output,None
  
