@@ -41,6 +41,7 @@ The bot is also responsible to send a welcome message and count members in [Otak
 ### Version 3.2.1
 + Removed standard deviation from `!stats`. Alternatively, it returns the distance from the standard serie by evaluating the difference of the sums of the rolled serie with the standard one;
 + In `!stats` the bot sends only one message (two if six stats are requested);
++ Added `!superstats` to roll 3 times `!stats 6`;
 
 ### Version 3.2.0
 + Create this repository and write this file;
