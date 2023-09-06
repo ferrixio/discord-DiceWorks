@@ -74,7 +74,7 @@ async def tira(ctx, *arg):
         else:
             if len(S)==1:
                 S=S[0]
-            await ctx.channel.send(f"DEBUG Tiro di {ctx.message.author.global_name}: {R} totale: {S}")
+            await ctx.channel.send(f"Tiro di {ctx.message.author.global_name}: {R} totale: {S}")
 
     except:
         await ctx.channel.send("Type error")
@@ -94,7 +94,7 @@ async def adv(ctx, *arg):
             if len(S)==1:
                 S=S[0]
 
-            await ctx.channel.send(f'DEBUG {funny} {R} quindi {S}')
+            await ctx.channel.send(f'{funny} {R} quindi {S}')
 
     except:
         await ctx.channel.send("Type error")
@@ -114,7 +114,7 @@ async def dis(ctx, *arg):
             if len(S) == 1:
                 S = S[0]
 
-            await ctx.channel.send(f'DEBUG {funny} {R} quindi {S}')
+            await ctx.channel.send(f'{funny} {R} quindi {S}')
 
     except:
         await ctx.channel.send("Type error")      
@@ -132,11 +132,11 @@ async def stats(ctx, arg):
             copy = i.split('\t')   #looking for 18 & 3. Char " x" is needed because of the nature of command split 
             text = text + ("\t :four_leaf_clover:")*(copy[1] == " 18") + ("\t :broken_heart:")*(copy[1] == " 3") + "\n"
         
-        await ctx.channel.send(f"DEBUG {ctx.message.author.global_name}, queste sono le stats che mi hai chiesto" + 
+        await ctx.channel.send(f"{ctx.message.author.global_name}, queste sono le stats che mi hai chiesto" + 
                                f" (è già stato rimosso il dado col valore più basso)\n" + text)
 
         if S:
-            await ctx.channel.send(f'DEBUG La distanza dalla serie standard è {S}')
+            await ctx.channel.send(f'La distanza dalla serie standard è {S}')
 
     except:
         await ctx.channel.send("Type error")
@@ -155,7 +155,7 @@ async def tpc(ctx, *arg):
     A = ['1d20']+list(arg)
     try:
         R,S = DB.standard_roll(A)
-        await ctx.channel.send(f"DEBUG {ctx.message.author.global_name}'s tpc: {R}\t totale: {S}")
+        await ctx.channel.send(f"{ctx.message.author.global_name}'s tpc: {R}\t totale: {S}")
 
     except:
         await ctx.channel.send("Type error")
@@ -167,10 +167,10 @@ async def coin(ctx):
 
     c = DB.coin()
     if c == 'in piedi':
-        await ctx.channel.send(f"DEBUG Ohibò! La moneta di {ctx.message.author.global_name} dev'essere truccata... si è fermata `{c}`")
+        await ctx.channel.send(f"Ohibò! La moneta di {ctx.message.author.global_name} dev'essere truccata... si è fermata `{c}`")
         return
     
-    await ctx.channel.send(f"DEBUG {ctx.message.author.global_name}, è uscito `{c}`")
+    await ctx.channel.send(f"{ctx.message.author.global_name}, è uscito `{c}`")
 
 
 @bot.command()
@@ -184,7 +184,7 @@ async def forall(ctx,*arg):
         else:
             if len(S) == 1:
                 S = S[0]
-            await ctx.channel.send(f"DEBUG Forall di {ctx.message.author.global_name}: {R} totale: {S[1:-1]}")
+            await ctx.channel.send(f"Forall di {ctx.message.author.global_name}: {R} totale: {S[1:-1]}")
 
     except:
         await ctx.channel.send("Type error")
@@ -194,7 +194,7 @@ async def forall(ctx,*arg):
 async def cento(ctx):
     """Command to roll only 1d100"""
     from random import randint
-    await ctx.channel.send(f"DEBUG Tiro percentuale di {ctx.message.author.global_name}: `[{randint(1,100)}]")
+    await ctx.channel.send(f"Tiro percentuale di {ctx.message.author.global_name}: `[{randint(1,100)}]")
 
 
 @bot.command()
@@ -210,7 +210,7 @@ async def elvenchad(ctx,*arg):
         if 20 in remake:
             await ctx.channel.send('https://tenor.com/view/giga-chad-gif-23143840')
 
-        await ctx.channel.send(f"DEBUG Elvenchad di {ctx.message.author.global_name}: `{R}` + `{extra}` = `{remake}`,\t quindi: {elven_acc}")
+        await ctx.channel.send(f"Elvenchad di {ctx.message.author.global_name}: `{R}` + `{extra}` = `{remake}`,\t quindi: {elven_acc}")
             
     except:
         await ctx.channel.send("Type error")
@@ -228,7 +228,7 @@ async def explode(ctx,*arg):
         else:
             if len(S) == 1:
                 S = S[0]
-            await ctx.channel.send(f"DEBUG Lc di {ctx.message.author.global_name}: {R} quindi {S}")
+            await ctx.channel.send(f"Lc di {ctx.message.author.global_name}: {R} quindi {S}")
 
     except:
         await ctx.channel.send("Type error")
