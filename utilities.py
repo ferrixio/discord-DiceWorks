@@ -92,7 +92,8 @@ dic_global_help={
             "**elvenchad**: elven accuracy feature\n" +\
             "**explode**: explosive dice rolls (with modifiers)\n" +\
             "**forall**: rolls dice and add modifiers to each result\n" +\
-            "**stats**: stats generator for d&d 5e\n" +"¬"*50,
+            "**stats**: stats generator for d&d 5e\n" +\
+            "**superstats**: select a statblock among 3\n" +"¬"*50,
         
         "miscellaneous":
             "**loli**: I leave this to your imagination; just try it!\n" +\
@@ -134,6 +135,8 @@ dic_local_help={
         "reset":"Reset the rng seed.",
 
         "stats":"Rolls 4 dice and sums the three highest. The syntax is **!stats x**, where x=many stats to generate (max 6).",
+
+        "superstats":"Generates three times six stats to grant the user to pick one combination among 3",
 
         "tira":"Rolls multiple dice (with also modifiers). The syntax is **!tira nds+c**, where n=number of dice, "+\
                 "s=type of dice (among 2 and 256) and c=modifiers.\n If the user puts a +/- beetween dice "+\
