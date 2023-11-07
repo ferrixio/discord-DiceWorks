@@ -1,4 +1,4 @@
-#©Samuele Ferri (@ferrixio) 2023      Bot version: 3.2.1
+#©Samuele Ferri (@ferrixio) 2023      Bot version: 3.3.0
 
 from random import randint
 from math import floor
@@ -6,7 +6,6 @@ from math import floor
 kill_terms = ("I can roll al least 64 dice simultaneously",
               "255 is the maximal amplitude of the die",
               "2 is the minimal amplitude of the die")
-
 
 
 """Class to manage dice rolls. It is not an object, but only a collection of functions called
@@ -272,7 +271,7 @@ def superstats() -> str:
 
         tableStr += f"Stat {i+1}:\t\t`{sum(R1)} -> {_getModifier(R1)}`\t\t" + \
                     f"`{sum(R2)} -> {_getModifier(R2)}`\t\t`{sum(R3)} -> {_getModifier(R3)}`\n"
-        
+
     return tableStr[:-1]
 
 def forall(L:list):

@@ -1,0 +1,115 @@
+# Changelog
+
+Legend:
++ = new implementation
+- = removed item
+* = bug fixing
+^ = miscellaneous
+
+## Version 3.3.0
++ Added `!superstats` to roll 3 times `!stats 6`
+- Removed standard deviation from `!stats`. Alternatively, it returns the distance from the standard serie by evaluating the difference of the sums of the rolled serie with the standard one
+^ In `!stats` the bot sends only one message (two if six stats are requested)
+
+## Version 3.2.0
++ Create this repository and write this file
++ Added `!reset` to reset the random number generator seed
+- Removed `!SFmembri` because it was useless
+* Fixed a bug involving username display in answers. Now the bot uses the `global_name` attribute
+* Fixed a bug in `!member` that brakes the function when the command is invoked in a private chat with the bot
+* Edited `!help` to avoid bugs if there are other bots/clients that uses the same syntax to call this command
+^ Changed some values and names in the code, not in the answers
+^ Renamed `!lc` command in `!explode`
+^ Discovered that not writing a return statements in a function, automatically it returns None (after 3 years of coding)
+^ Now `!member` sends to the author the number of members of the server and works with everybody
+^ Reworked some parts of the code to optimize them
+
+## Version 3.1.0
++ Added standard deviation in output of function `!stats`
++ Added `!login` for my owner to get where I am. Improved `tiraDadi`
+* Fixed a bug in `on_message()` method, which could cause a loop of the bot (strange that I've never notice it)
+^ Edited the function !forall. Now accepts dice as modifiers (they will be rolled, too)
+
+## Version 3.0.0
+>> Brand new programming implementations!
++ Created a new function "conversione" that converts input list in a compact version of it. Ex: `!tira 5d6+1d4 +1 1- 2d10 --> [5d6+1d4+1, 1-2d10]`
+* Adjusted ALL the functions of the bot
+^ Adjusted the processing after `f_roll` and handled some error, like "no dice in input"
+^ Now the bot will ignore isolated numbers in input (that have not +/-)
+^ Now, ALL the functions that roll dice can make multiple rolls at the same time, separately
+
+## Version 2.11.0
++ Added `!lc` to roll explosive dice rolls for savage world and similar games
+* Corrected a type error and an output's bug in !stats
+
+## Version 2.10.0
++ Added `!elvenchad` for elven accuracy feature
+^ Rewritten functions `!adv` and `!dis`. Removed `!pandoru`
+
+## Version 2.9.0
++ Added `!ping` to get bot latency
+* Compressed some if-statements. Fixed some bugs. Move some part of code among classes
+
+## Version 2.8.0
++ Added the `!changelog` command; it sends as DM this file
++ Added `!SFmembri` to get guild's member number that works only for me
+^ Improved some details
+
+## Version 2.7.0
++ Created a stand-alone class for auxiliary functions, like `!help`
+
+## Version 2.6.0
++ Created a custom `!help` command with dictionaries
+
+## Version 2.5.0
++ Added `!membri` for admins (@commands.has_permissions(administrator=True))
++ Added `!pandoru` for X-mas
+* Corrected `!loli` command (because Omar annoyed me...)
+^ Edited `!help` command
+
+## Version 2.4.2
++ Added the private function `!membri`
+* Corrected a type error in the output of function `!forall`
+* Avoided some bugs
+
+## Version 2.4.1
+* Corrected an error in the output of function `!cento`
+
+## Version 2.4.0
++ Added `!forall`, which rolls some dice and add modifiers to each result
++ Added a new function, `!cento`, which rolls 1d100
+* By an unkown reason, it doesn't work if there is a blank space between multiple dice, but it works if there is a '+'
+
+## Version 2.3.0
++ Added new pictures to `!loli`
++ Added a phrase exclusively for Visco in `!stats`
++ Added a new welcome phrase in 'Otakus'
+^ Changed output font of dice' results
+
+## Version 2.2.0
++ Added new class, called 'Otakus', used in Otaku's server for welcome message
++ Added the 'soap' answer (thanks to 'soap-opera dungeon master' Visco)
+^ Compacted the output message in `!stats` and added some emojis
+* Corrected some typos in messages
+
+## Version 2.1.0
++ Added the commands:
+ `!adv` for advantage rolls
+ `!dis` for disadvantage rolls
+ `!stats` to generate automatically n stats, n among 1 and 6
+ `!loli` to send ""cute"" loli's pictures
+ `!tpc` to roll `!tira 1d20+mod` (useful for attack rolls and saving throws)
+ `!coin` to toss a 1d2 (it has a 1/256 chance that the coin returns a draw)
+
+## Version 2.0.0
+>> Built a 'real' programm.
++ Implemented in `!tira`: single throws, multiple separated throws, multiple summed throws
++ Correction of some type errors in input string: operators + or - at the beginning/end of the string, blank spaces between characters in the input string, type error in dice' numbers and amplitude
+
+## Version 1.0.1
+* Bug fixed
+
+## Version 1.0.0
+>> Built a basic programm, which was able to roll dice but with some issue in the main function `!tira`
++ Implemented the base answer to "master" for me and friends' of mine
+^ Learned how to use 'dotenv' methods for storing information

@@ -1,5 +1,5 @@
 #### Dice Generator for Discord ####
-#©Samuele Ferri 2023      Bot version: 3.2.1
+#©Samuele Ferri 2023      Bot version: 3.3.0
 
 import discord
 from discord.ext import commands
@@ -228,7 +228,7 @@ async def explode(ctx,*arg):
         else:
             if len(S) == 1:
                 S = S[0]
-            await ctx.channel.send(f"Lc di {ctx.message.author.global_name}: {R} quindi {S}")
+            await ctx.channel.send(f"Explosion di {ctx.message.author.global_name}: {R} quindi {S}")
 
     except:
         await ctx.channel.send("Type error")

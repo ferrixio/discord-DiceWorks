@@ -1,4 +1,4 @@
-#©Samuele Ferri 2023      Bot version: 3.2.1
+#©Samuele Ferri 2023      Bot version: 3.3.0
 
 from os import getenv
 from random import choice
@@ -101,7 +101,7 @@ dic_global_help={
             "**ping**: shows bot current latency\n"+\
             "**reset**: reset the rng seed\n"+"¬"*50,
 
-        "copyright":"©Samuele Ferri 2023\t\t\t\t Bot version: 3.2"}
+        "copyright":"©Samuele Ferri 2023\t\t\t\t Bot version: 3.3.0"}
 
 dic_local_help={
         "adv":"Rolls dice and chooses the highest. The syntax is **!adv nds+c**, where " +\
