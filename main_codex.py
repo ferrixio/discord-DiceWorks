@@ -1,31 +1,33 @@
 #### Dice Generator for Discord ####
-#©Samuele Ferri 2023      Bot version: 3.3.0
+#©Samuele Ferri 2023      Bot version: 3.4.0
 
 import discord
 from discord.ext import commands
 from os import getenv
 from dotenv import load_dotenv
 import diceBlock as DB
-from utilities import ServerUtilities as SU
+from utilities import ServerUtilities
 
 load_dotenv()
 TOKEN = getenv('DISCORD_TOKEN')
 
 intento = discord.Intents.all()   #threading to handle on_event status
-acty = discord.Activity(type=discord.ActivityType.listening) #defunes activity
+acty = discord.Activity(type=discord.ActivityType.listening) #defines activity
 bot = commands.Bot(command_prefix="!", intents=intento, activity=acty, status=discord.Status.idle)
 bot.remove_command("help")
 
 ##### BEGINNING AND EVENT #####
 @bot.event
 async def on_ready():
-    print(f'{bot.user} has connected to Discord!')
+    owner = await bot.fetch_user(getenv('FERRI'))
+    await owner.send("The bot has successfully connected to Discord")
+    print("Bot is online")
 
 
 @bot.group(invoke_without_permission=True)
 async def help(ctx,*arg):
     """Custom help command with Embed"""
-    em = SU.custom_help(arg, bot.user.name)
+    em = ServerUtilities.custom_help(arg, bot.user.name)
     await ctx.channel.send(embed=em)
 
 
@@ -33,7 +35,7 @@ async def help(ctx,*arg):
 async def on_member_join(member):
     """Handling welcome message for Otaku's House"""
 
-    sentence = SU.welcome().format(member.mention)
+    sentence = ServerUtilities.welcome().format(member.mention)
 
     if member.guild.id == int(getenv('OTAKUS_GUILD')):
         await bot.get_channel(int(getenv('chat_in_OH'))).send(sentence)
@@ -49,7 +51,7 @@ async def on_message(ctx):
         pass
 
     if "master" in ctx.content or "Master" in ctx.content:
-        response=SU.master(ctx.author.global_name,ctx.author.id)
+        response=ServerUtilities.master(ctx.author.global_name,ctx.author.id)
         await ctx.channel.send(response)
 
     elif "fate" in ctx.content:
@@ -66,7 +68,7 @@ async def on_message(ctx):
 @bot.command()
 async def tira(ctx, *arg):
     """Standard command to roll dice"""
-    
+
     try:
         R,S = DB.standard_roll(list(arg))
         if not S:
@@ -236,13 +238,6 @@ async def explode(ctx,*arg):
 
 ##### UTILITY COMMAND LIST #####
 @bot.command()
-@commands.cooldown(5,30)
-async def loli(ctx):
-    """Command to get cute loli pictures as direct message"""
-    await ctx.author.send(SU.loli())
-
-
-@bot.command()
 async def member(ctx):
     """Coomand to count the users in current guild. Doesn't include bots"""
 
@@ -255,13 +250,12 @@ async def member(ctx):
 
 
 @bot.command()
-@commands.is_owner()
-async def login(ctx):
-    """Command for bot's owner to get the list of servers in which the bot is in"""
-    ans=''
-    for guild in bot.guilds:
-        ans += f'{guild.name} (id: {guild.id})\n'
-    await ctx.author.send(f'The bot is connected to the following servers:\n{ans}')
+async def redo(ctx):
+    """Command to redo another command"""
+    message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+    t = message.content.split()
+    ctx.command = bot.get_command(t[0].replace('!',''))
+    await ctx.invoke(ctx.command, *t[1:])
 
 
 @bot.command()
@@ -275,6 +269,49 @@ async def reset(ctx):
 async def ping(ctx):
     """Command that sends the bot latency"""
     await ctx.channel.send(f"Bot current latency = {round(bot.latency, 4)} sec")
+
+
+##### OWNER-ONLY COMMAND GROUP #####
+@bot.group(invoke_without_command=True)
+async def ferri(ctx):
+    await ctx.send('Subcommand not found')
+
+@ferri.command()
+@commands.is_owner()
+async def guilds(ctx):
+    """Command for bot's owner to get the list of servers in which the bot is in"""
+    ans=''
+    for guild in bot.guilds:
+        ans += f'{guild.name} (id: {guild.id})\n'
+    await ctx.author.send(f'The bot is connected to the following servers:\n{ans}')
+
+@ferri.command()
+@commands.is_owner()
+async def upgrade(ctx, *, msg):
+    """Command that sends to all guilds that the bot was updated"""
+    em = ServerUtilities._getChangelog(bot.user.name, msg)
+    for guild in bot.guilds:
+        for channel in guild.text_channels:
+            try:
+                await channel.send(embed=em)
+            except Exception:
+                continue
+            else:
+                break    
+
+@ferri.command()
+@commands.is_owner()
+async def send(ctx, *, msg):
+    """Command for bot's owner to send a message to ALL guilds where the bot is currently active"""
+    em = ServerUtilities._text2Embed(bot.user.name, msg)
+    for guild in bot.guilds:
+        for channel in guild.text_channels:
+            try:
+                await channel.send(embed=em)
+            except Exception:
+                continue
+            else:
+                break
 
 
 bot.run(TOKEN)      # Starting the bot

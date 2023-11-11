@@ -6,6 +6,14 @@ Legend:
 * = bug fixing
 ^ = miscellaneous
 
+## Version 3.4.0
++ Now `on_ready` event sends to me a message to tell me if the bot is online
++ Added owner-only group of commands to send messages to all guilds
++ Moved the command dictionary to a .json file
++ Added the possibility to redo an old command by reply to it
+- Removed `!loli` command
+* Fixed a type error in the custom answers in advantage/disadvantage rolls
+
 ## Version 3.3.0
 + Added `!superstats` to roll 3 times `!stats 6`
 - Removed standard deviation from `!stats`. Alternatively, it returns the distance from the standard serie by evaluating the difference of the sums of the rolled serie with the standard one

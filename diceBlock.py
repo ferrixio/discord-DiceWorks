@@ -1,4 +1,4 @@
-#©Samuele Ferri (@ferrixio) 2023      Bot version: 3.3.0
+#©Samuele Ferri (@ferrixio) 2023      Bot version: 3.4.0
 
 from random import randint
 from math import floor
@@ -198,18 +198,23 @@ def van_svg(L:list, term:str, name:str):
         singleSums.append(total)
         dice += die
     
-    #Cool custom answers
+    #Cool custom answers. It checks only the first set of results
     for i in range(len(finalResults)):
         if max(finalResults[i]) == dice[i] and min(finalResults[i]) == dice[i]:
             ans = f'{name} lei è proprio fortunato'
+            break
         elif max(finalResults[i]) == dice[i]:
             ans = f'Well duck, {name}!'
+            break
         elif max(finalResults[i]) == 1:
-            ans = f'{name}, lei è sfortunato :(\t'           
+            ans = f'{name}, lei è sfortunato :(\t'
+            break           
         elif len(set(finalResults[i])) == 1 and len(finalResults[i]) != 1:
             ans = f'Uh?\t {name}:'
+            break
         else:
             ans = f'La {"s"*(term == "dis")}fortuna di {name} dice'
+            break
             
     finalResults = erase_parethesis(finalResults,'')
 
