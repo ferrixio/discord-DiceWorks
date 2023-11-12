@@ -3,7 +3,7 @@
 
     "help_description": "Type !help [command] for more info on a specific command; works also with a list of commands separated by a blank space.",
 
-    "help_short": "help_description", 
+    "help_short": "Type !help to get the list of available commands.", 
     
     "welcome_messages":[
         "Benvenuto su Otaku's House, {} :wave:",
