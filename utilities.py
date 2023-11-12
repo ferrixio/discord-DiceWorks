@@ -50,6 +50,7 @@ dic_global_help={
         "miscellaneous":
             "**member**: sends the number of member of this server as DM\n" +\
             "**ping**: shows bot current latency\n"+\
+            "**redo**: repeat any command by replying to it\n"+\
             "**reset**: reset the rng seed\n"+"¬"*50}
 
 
