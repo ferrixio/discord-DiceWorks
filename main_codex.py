@@ -254,7 +254,7 @@ async def redo(ctx):
     """Command to redo another command"""
     message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
     t = message.content.split()
-    if t == ['!redo']:
+    if t[0] == '!redo':
         await ctx.channel.send("No command to redo")
     else:
         ctx.command = bot.get_command(t[0].replace('!',''))
