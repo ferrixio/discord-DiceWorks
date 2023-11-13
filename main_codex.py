@@ -196,7 +196,7 @@ async def forall(ctx,*arg):
 async def cento(ctx):
     """Command to roll only 1d100"""
     from random import randint
-    await ctx.channel.send(f"Tiro percentuale di {ctx.message.author.global_name}: `[{randint(1,100)}]")
+    await ctx.channel.send(f"Tiro percentuale di {ctx.message.author.global_name}: `[{randint(1,100)}]`")
 
 
 @bot.command()
