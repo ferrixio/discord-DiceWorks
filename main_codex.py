@@ -1,5 +1,5 @@
 #### Dice Generator for Discord ####
-#©Samuele Ferri 2023      Bot version: 3.4.0
+#©Samuele Ferri 2023      Bot version: 3.4.1
 
 import discord
 from discord.ext import commands
@@ -255,6 +255,8 @@ async def redo(ctx):
     message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
     t = message.content.split()
     if t[0] == '!redo':
+        await ctx.channel.send("You can't redo a redo")
+    elif '!' not in t[0]:
         await ctx.channel.send("No command to redo")
     else:
         ctx.command = bot.get_command(t[0].replace('!',''))

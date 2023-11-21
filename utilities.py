@@ -1,4 +1,4 @@
-#©Samuele Ferri 2023      Bot version: 3.4.0
+#©Samuele Ferri 2023      Bot version: 3.4.1
 
 from os import getenv
 from random import choice

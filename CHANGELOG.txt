@@ -6,6 +6,10 @@ Legend:
 * = bug fixing
 ^ = miscellaneous
 
+## Version 3.4.1
++ Added a warning message in `!redo` to tell players that the message they reply does not contain any command
+* Fixed typos in `tpc` and `cento`
+
 ## Version 3.4.0
 + Now `on_ready` event sends to me a message to tell me if the bot is online
 + Added owner-only group of commands to send messages to all guilds
