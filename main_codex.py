@@ -76,7 +76,7 @@ async def tira(ctx, *arg):
         else:
             if len(S)==1:
                 S=S[0]
-            await ctx.channel.send(f"Tiro di {ctx.message.author.global_name}: {R} totale: {S}")
+            await ctx.channel.send(f"Tiro di {ctx.message.author.global_name}: {R}, totale: {S}")
 
     except:
         await ctx.channel.send("Type error")
@@ -95,7 +95,6 @@ async def adv(ctx, *arg):
             #non mettere la virgola prima di totale perché c'è già nell'output
             if len(S)==1:
                 S=S[0]
-
             await ctx.channel.send(f'{funny} {R} quindi {S}')
 
     except:
@@ -115,7 +114,6 @@ async def dis(ctx, *arg):
             #non mettere la virgola prima di totale perché c'è già nell'output
             if len(S) == 1:
                 S = S[0]
-
             await ctx.channel.send(f'{funny} {R} quindi {S}')
 
     except:
@@ -157,7 +155,9 @@ async def tpc(ctx, *arg):
     A = ['1d20']+list(arg)
     try:
         R,S = DB.standard_roll(A)
-        await ctx.channel.send(f"{ctx.message.author.global_name}'s tpc: {R}\t totale: {S}")
+        if len(S)==1:
+            S=S[0]
+        await ctx.channel.send(f"{ctx.message.author.global_name}'s tpc: {R}, totale: {S}")
 
     except:
         await ctx.channel.send("Type error")
@@ -196,7 +196,7 @@ async def forall(ctx,*arg):
 async def cento(ctx):
     """Command to roll only 1d100"""
     from random import randint
-    await ctx.channel.send(f"Tiro percentuale di {ctx.message.author.global_name}: `[{randint(1,100)}]`")
+    await ctx.channel.send(f"d100 di {ctx.message.author.global_name}: `[{randint(1,100)}]`")
 
 
 @bot.command()
