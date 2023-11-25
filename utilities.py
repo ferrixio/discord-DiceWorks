@@ -102,7 +102,7 @@ class ServerUtilities:
     
     def _text2Embed(name:str, text:str) -> Embed:
         """Function that converts text to Embed message"""
-        em = Embed(title=f"Message from {name}?", colour=ACQUA)
+        em = Embed(title=f"Message from {name}", colour=ACQUA)
         em.add_field(name="", value=text)
         return em
 
