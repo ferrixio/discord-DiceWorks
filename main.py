@@ -76,7 +76,7 @@ async def tira(ctx, *arg):
         else:
             if len(S)==1:
                 S=S[0]
-            await ctx.channel.send(f"Tiro di {ctx.message.author.global_name}: {R}, totale: {S}")
+            await ctx.channel.send(f"Tiro di {ctx.message.author.global_name}: {R} totale: {S}")
 
     except:
         await ctx.channel.send("Type error")
