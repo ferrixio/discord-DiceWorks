@@ -74,6 +74,7 @@ async def tira(ctx, *arg):
         if not S:
             await ctx.channel.send(R)
         else:
+            #non mettere la virgola prima di totale perché c'è già nell'output
             if len(S)==1:
                 S=S[0]
             await ctx.channel.send(f"Tiro di {ctx.message.author.global_name}: {R} totale: {S}")
@@ -186,7 +187,7 @@ async def forall(ctx,*arg):
         else:
             if len(S) == 1:
                 S = S[0]
-            await ctx.channel.send(f"Forall di {ctx.message.author.global_name}: {R} totale: {S[1:-1]}")
+            await ctx.channel.send(f"{ctx.message.author.global_name}'s forall: {R} totale: {S[1:-1]}")
 
     except:
         await ctx.channel.send("Type error")
@@ -196,7 +197,7 @@ async def forall(ctx,*arg):
 async def cento(ctx):
     """Command to roll only 1d100"""
     from random import randint
-    await ctx.channel.send(f"d100 di {ctx.message.author.global_name}: `[{randint(1,100)}]`")
+    await ctx.channel.send(f"{ctx.message.author.global_name}'s d100: `[{randint(1,100)}]`")
 
 
 @bot.command()
@@ -212,7 +213,7 @@ async def elvenchad(ctx,*arg):
         if 20 in remake:
             await ctx.channel.send('https://tenor.com/view/giga-chad-gif-23143840')
 
-        await ctx.channel.send(f"Elvenchad di {ctx.message.author.global_name}: `{R}` + `{extra}` = `{remake}`,\t quindi: {elven_acc}")
+        await ctx.channel.send(f"{ctx.message.author.global_name}'s elven accuracy: `{R}` + `{extra}` = `{remake}`,\t `->` {elven_acc}")
             
     except:
         await ctx.channel.send("Type error")
@@ -230,7 +231,7 @@ async def explode(ctx,*arg):
         else:
             if len(S) == 1:
                 S = S[0]
-            await ctx.channel.send(f"Explosion di {ctx.message.author.global_name}: {R} quindi {S}")
+            await ctx.channel.send(f"{ctx.message.author.global_name}'s explosion: {R} quindi {S}")
 
     except:
         await ctx.channel.send("Type error")
