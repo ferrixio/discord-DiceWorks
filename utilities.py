@@ -95,8 +95,8 @@ class ServerUtilities:
     def _getChangelog(name:str, text:str = '') -> Embed:
         """Function that returns an embed version of the changelog"""
         em = Embed(title=f"What's new in {name}?", colour=ACQUA, description=help_short)
-        em.add_field(name="", value=text, inline=True)
-        em.add_field(name="", value="Complete changelog at https://github.com/ferrixio/discord-DiceWorks/blob/main/CHANGELOG.txt", inline=True)
+        em.add_field(name="", value=text, inline=False)
+        em.add_field(name="", value="Complete changelog at https://github.com/ferrixio/discord-DiceWorks/blob/main/CHANGELOG.txt", inline=False)
         em.set_footer(text=copyright)
         return em
     
