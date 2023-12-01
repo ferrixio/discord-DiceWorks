@@ -1,5 +1,5 @@
 {
-    "copyright":"Samuele Ferri 2023\t\t\t\t Bot version: 3.4.1",
+    "copyright":"Samuele Ferri 2023\t\t\t\t Bot version: 3.5.0",
 
     "help_description": "Type !help [command] for more info on a specific command; works also with a list of commands separated by a blank space.",
 
@@ -79,6 +79,7 @@
         "stats":"Rolls 4 dice and sums the three highest. The syntax is **!stats x**, where x=many stats to generate (max 6).",
         "superstats":"Generates three times six stats to grant the user to pick one combination among 3",
         "tira":"Rolls multiple dice (with also modifiers). The syntax is **!tira nds+c**, where n=number of dice, s=type of dice (among 2 and 256) and c=modifiers.\nIf the user puts a +/- beetween dice it will sum the results, if it's a blank space it will return separated results. Isolated numbers will be ignored.",
-        "tpc":"Rolls 1d20 and sums modifiers. The syntax is **!tpc x**, where x=modifiers (you must specify the sign)."
+        "tpc":"Rolls 1d20 and sums modifiers. The syntax is **!tpc x**, where x=modifiers (you must specify the sign).",
+        "ts":"Make a saving throw. The syntax is **!ts x <y**, where x=modifiers as in !tpc and y=dc of the saving throw."
     }
 }

@@ -1,4 +1,4 @@
-#©Samuele Ferri (@ferrixio) 2023      Bot version: 3.4.1
+#©Samuele Ferri (@ferrixio) 2023      Bot version: 3.5.0
 
 from random import randint
 from math import floor

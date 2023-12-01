@@ -24,6 +24,7 @@ This bot can do many things:
 
     > simple rolls
     > advantage & disavantage rolls
+    > saving throws
     > toss coins
     > stats generator for D&ampD 5e
     > explosive rolls

@@ -1,5 +1,5 @@
 #### Dice Generator for Discord ####
-#©Samuele Ferri 2023      Bot version: 3.4.1
+#©Samuele Ferri 2023      Bot version: 3.5.0
 
 import discord
 from discord.ext import commands
@@ -147,7 +147,7 @@ async def stats(ctx, arg):
 async def superstats(ctx):
     """Command to roll 3 set of 6-stats simultaneously"""
 
-    await ctx.channel.send(f"{ctx.message.author.global_name}, le tue superstats sono\n{DB.superstats()}")
+    await ctx.channel.send(f"{ctx.message.author.global_name}'s superstats:\n{DB.superstats()}")
 
 
 @bot.command()       
@@ -158,8 +158,45 @@ async def tpc(ctx, *arg):
         R,S = DB.standard_roll(A)
         if len(S)==1:
             S=S[0]
-        await ctx.channel.send(f"{ctx.message.author.global_name}'s tpc: {R}, totale: {S}")
+        await ctx.channel.send(f"{ctx.message.author.global_name}'s tpc: {R} totale: {S}")
 
+    except:
+        await ctx.channel.send("Type error")
+
+
+@bot.command()
+async def ts(ctx, *arg):
+    """Command to perform saving throws. The reqired character to properly activate the saving
+    throw is '<', since a successful st is greater or equal to DC."""
+
+    # looking for the DC
+    dcPieces, temp = [], []
+    for i in range(len(list(arg))):
+        if '<' in arg[i]:
+            dcPieces.append(arg[i])
+            try:
+                dcPieces.append(arg[i+1])
+            except IndexError:
+                pass
+            break
+        temp.append(arg[i])
+    
+    try:
+        dc = int(float(((''.join(dcPieces)).split('<')[1])))
+        if dc < 0:  # negative dc does not have any sense...
+            dc = 0
+    except:
+        dc = 0
+
+    A = ['1d20']+temp
+    try:        
+        R,S = DB.standard_roll(A)
+        if len(S)==1:
+            S=S[0]
+        ans = ''
+        if dc:
+            ans = f' over {dc} -> ' + 'Success!'*(S>=dc) + 'Failed'*(S<dc)
+        await ctx.channel.send(f"{ctx.message.author.global_name}'s saving throw: {R} {S}{ans}")
     except:
         await ctx.channel.send("Type error")
         
@@ -231,7 +268,7 @@ async def explode(ctx,*arg):
         else:
             if len(S) == 1:
                 S = S[0]
-            await ctx.channel.send(f"{ctx.message.author.global_name}'s explosion: {R} quindi {S}")
+            await ctx.channel.send(f"{ctx.message.author.global_name}'s explosion: {R} `->` {S}")
 
     except:
         await ctx.channel.send("Type error")

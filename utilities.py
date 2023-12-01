@@ -1,4 +1,4 @@
-#©Samuele Ferri 2023      Bot version: 3.4.1
+#©Samuele Ferri 2023      Bot version: 3.5.0
 
 from os import getenv
 from random import choice
@@ -35,7 +35,8 @@ dic_global_help={
         "standard":
             "**tira**: rolls dice with modifiers\n" +\
             "**tpc**: rolls a single d20; can add modifiers\n" +\
-            "**cento**: rolls a single d100; can't add modifiers\n" +\
+            "**ts**: makes a saving throw (add '<x' for the dc)\n" +\
+            "**cento**: rolls 1d100; can't add modifiers\n" +\
             "**coin**: tosses a coin\n" +"¬"*50,
 
         "advanced":
