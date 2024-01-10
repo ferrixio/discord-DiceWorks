@@ -9,6 +9,7 @@ Legend:
 ## Version 3.6.0
 * Using the letter "D" in roll-commands does not raise type error
 ^ Updated the copyright year
+^ Moved the command list in external files
 
 ## Version 3.5.0
 + Added `!ts` to rolls saving throws

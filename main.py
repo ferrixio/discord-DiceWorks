@@ -5,7 +5,6 @@ import discord
 from discord.ext import commands
 from os import getenv
 from dotenv import load_dotenv
-import diceBlock as DB
 from utilities import ServerUtilities
 
 load_dotenv()
@@ -23,7 +22,7 @@ async def on_ready():
     print("Standard commands loaded")
     await bot.load_extension("cmdSpells")       # load spell-commands
     print("Spells loaded")
-    owner = await bot.fetch_user(getenv('FERRI'))   # retrieve owner user by its saved ID
+    owner = await bot.fetch_user(getenv('FERRI'))   # retrieve owner user by its ID
     await owner.send("The bot has successfully connected to Discord")
     print("Bot is online")
 
