@@ -6,7 +6,8 @@ Legend:
 * = bug fixing
 ^ = miscellaneous
 
-## Version 3.5.1
+## Version 3.6.0
+* Using the letter "D" in roll-commands does not raise type error
 ^ Updated the copyright year
 
 ## Version 3.5.0

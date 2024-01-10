@@ -1,5 +1,3 @@
-#©Samuele Ferri (@ferrixio) 2024      Bot version: 3.5.0
-
 from random import randint
 from math import floor
 
@@ -25,21 +23,21 @@ def string2dice(L:list):
             - if begins with +/-, attaches it to previous item (if first, don't)
             - if ends with +/-, join it with the next item
             - else appends it (isolated item)
-        - Returns a list of strings
+        - Returns a list of strings (in lowercase)
 
     Example:\n
     INPUT from !command: ('3d20+1', '+2', '+1d4', '1-', '6d8-1', '-1d10', '-3')\n
     OUTPUT: ['3d20+1+2+1d4', '1-6d8-1-1d10-3']
     """
 
-    C=[L[0]]
+    C=[L[0].lower()]
     for i in range(1,len(L)):
         if L[i][0] in ('+','-'):
-            C[-1] += L[i]
+            C[-1] += L[i].lower()
         elif L[i][-1] in ('+','-'):
             L[i + 1] = L[i] + L[i + 1]
         else:
-            C.append(L[i])
+            C.append(L[i].lower())
 
     C = (i for i in C if 'd' in i)  #removes unused constants
     if C == []:
