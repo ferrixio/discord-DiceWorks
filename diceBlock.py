@@ -383,3 +383,20 @@ def reset_seed():
     from random import seed
     seed()
     return
+
+
+def evaluateSize(L:list, race:str):
+    """Evaluate the sizes of the character from its table"""
+    roll_h = [randint(1,L[2]) for _ in range(2)]
+    if race in ('elf', 'wood_elf', 'drow'):
+        roll_w = [randint(1,L[3])]
+    elif race in ('halfling', 'gnome'):
+        roll_w = [1]
+    else:
+        roll_w = [randint(1,L[3]) for _ in range(2)]
+    
+    # size generation according to dnd 5e
+    h = L[0] + 2.5*sum(roll_h)
+    w = L[1] + 0.5*sum(roll_h)*sum(roll_w)
+    
+    return h, w

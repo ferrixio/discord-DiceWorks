@@ -20,8 +20,6 @@ bot.remove_command("help")
 async def on_ready():
     await bot.load_extension("cmdStandard")     # load roll-commands
     print("Standard commands loaded")
-    await bot.load_extension("cmdSpells")       # load spell-commands
-    print("Spells loaded")
     owner = await bot.fetch_user(getenv('FERRI'))   # retrieve owner user by its ID
     await owner.send("The bot has successfully connected to Discord")
     print("Bot is online")
@@ -29,15 +27,16 @@ async def on_ready():
 
 @bot.group(invoke_without_permission=True)
 async def help(ctx,*arg):
-    """Custom help command with Embed"""
+    """Custom help command with Embed. Also it sends a memo to the owner"""
     em = ServerUtilities.custom_help(arg, bot.user.name)
     await ctx.channel.send(embed=em)
+    if ctx.author.id == int(getenv('FERRI')):
+        await ctx.author.send('Ricordati che hai anche il gruppo ferri guilds/upgrade/send')
 
 
 @bot.event
 async def on_member_join(member):
     """Handling welcome message for Otaku's House"""
-
     sentence = ServerUtilities.welcome().format(member.mention)
 
     if member.guild.id == int(getenv('OTAKUS_GUILD')):
@@ -71,7 +70,6 @@ async def on_message(ctx):
 @bot.command()
 async def member(ctx):
     """Command to count the users in current guild. Doesn't include bots"""
-
     if ctx.guild is None:
         await ctx.send("We are in a private chat")
         return None

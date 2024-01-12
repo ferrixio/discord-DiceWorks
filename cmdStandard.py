@@ -1,4 +1,6 @@
+from gettext import translation
 from discord.ext import commands
+from json import load
 import diceBlock as DB
 
 @commands.command()
@@ -211,16 +213,32 @@ async def explode(ctx,*arg):
 
 
 @commands.command()
+async def race(ctx, *arg):
+    """Generates the height and weight of specified race"""
+    try:
+        term = ' '.join(arg)
+        with open("variables.json", "r") as f:
+            var = load(f)
+            key = [k for k, val in var["race_translator"].items() if term in val].pop()
+            table = var["dimension_table"][key]
+            
+        height, weight = DB.evaluateSize(table, key)
+        await ctx.channel.send(f"{ctx.message.author.global_name}'s {key} sizes: {height} cm and {weight} kg")
+    except:
+        await ctx.channel.send("Type error")
+
+@commands.command()
 async def reset(ctx):
     """Command to reset the rng seed"""
     DB.reset_seed()
     await ctx.channel.send(f"Random number generator seed reset by {ctx.message.author.global_name}")
 
 
+
 # this method must be here. It adds the commands to the bot
 async def setup(bot):
     CMD_LIST = (tira, adv, dis, stats, superstats, tpc, ts, coin, forall, cento,
-               elvenchad, explode, reset)
+               elvenchad, explode, reset, race)
     
     for i in CMD_LIST:
         bot.add_command(i)

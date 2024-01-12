@@ -44,7 +44,8 @@ dic_global_help={
             "**explode**: explosive dice rolls (with modifiers)\n" +\
             "**forall**: rolls dice and add modifiers to each result\n" +\
             "**stats**: stats generator for d&d 5e\n" +\
-            "**superstats**: select a statblock among 3\n" +"¬"*50,
+            "**superstats**: select a statblock among 3\n" +\
+            "**race**: size generator for d&d 5e"+"¬"*50,
         
         "miscellaneous":
             "**member**: sends the number of member of this server as DM\n" +\
@@ -73,7 +74,7 @@ class ServerUtilities:
             em.add_field(name="Advanced tools", value=dic_global_help["advanced"], inline=False)
             em.add_field(name="Miscellaneous", value=dic_global_help["miscellaneous"])
     
-        elif "full" in terms:
+        elif "full" in terms or "all" in terms:
             em = Embed(title=f"{name}'s full command list", colour=ACQUA, description="Sorted in alphabetic order")
             for i in dic_local_help:
                 em.add_field(name=i, value=dic_local_help[i], inline=False)

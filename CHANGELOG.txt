@@ -7,6 +7,7 @@ Legend:
 ^ = miscellaneous
 
 ## Version 3.6.0
++ Added the !race command
 * Using the letter "D" in roll-commands does not raise type error
 ^ Updated the copyright year
 ^ Moved the command list in external files

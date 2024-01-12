@@ -74,6 +74,7 @@
         "lc":"Rolls input dice and explode the result; it can sum modifiers. The syntax is **!lc dk+mods**, where k=dice and mods is a list of modifiers.",
         "member":"Sends as DM the number of member of this server; it doesn't count bots. Works only for admins.",
         "ping":"Shows the current bot latency.",
+        "race":"Generates race height and weight according to d&d 5e table. The syntax is **!race name**, where name is the race you have (in italian or english)",
         "redo":"Repeat any command. You can activate it by replying to it and writing !redo.",
         "reset":"Reset the rng seed.",
         "stats":"Rolls 4 dice and sums the three highest. The syntax is **!stats x**, where x=many stats to generate (max 6).",
@@ -81,5 +82,35 @@
         "tira":"Rolls multiple dice (with also modifiers). The syntax is **!tira nds+c**, where n=number of dice, s=type of dice (among 2 and 256) and c=modifiers.\nIf the user puts a +/- beetween dice it will sum the results, if it's a blank space it will return separated results. Isolated numbers will be ignored.",
         "tpc":"Rolls 1d20 and sums modifiers. The syntax is **!tpc x**, where x=modifiers (you must specify the sign).",
         "ts":"Make a saving throw. The syntax is **!ts x <y**, where x=modifiers as in !tpc and y=dc of the saving throw."
+    },
+
+    "dimension_table":{
+        "human":[140,55,10,4],
+        "elf":[135,45,10,4],
+        "wood elf":[135,50,10,4],
+        "drow":[135.5,37.5,6,6],
+        "halfling":[77.5,17.5,4,0],
+        "hill dwarf":[110,57.5,4,6],
+        "mountain dwarf":[120,65,4,6],
+        "dragonborn":[165,87.5,8,6],
+        "gnome":[87.5,17.5,4,0],
+        "halfelf":[142.5,55,8,4],
+        "halforc":[145,70,10,6],
+        "tiefling":[142.5,55,8,4]
+    },
+
+    "race_translator":{
+        "human": ["human", "umano"],
+        "elf": ["elf", "elfo alto", "high elf"],
+        "drow": ["drow", "elfo scuro"],
+        "wood elf": ["elfo dei boschi", "wood elf"],
+        "halfling": ["halfling"],
+        "hill dwarf": ["hill dwarf", "nano delle colline", "nano colline"],
+        "mountain dwarf": ["mountain dwarf", "nano delle montagne", "nano montagne"],
+        "dragonborn": ["dragonide", "dragonborn"],
+        "gnome": ["gnome", "gnomo"],
+        "halfelf": ["halfelf", "mezzelfo", "mezz'elfo"],
+        "halforc": ["halforc", "mezzorco", "mezzo'orco"],
+        "tiefling": ["tiefling"]
     }
 }
