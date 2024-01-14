@@ -259,7 +259,7 @@ async def ts(ctx, *arg):
 # this method must be here. It adds the commands to the bot
 async def setup(bot):
     CMD_LIST = (adv, cento, coin, dis, elvenchad, explode, forall, pg, race, reset, stats,
-                superstats, tira, tpc)
+                superstats, tira, tpc, ts)
     
     for i in CMD_LIST:
         bot.add_command(i)
