@@ -26,8 +26,8 @@ with open("variables.json", "r") as f:
     copyright = "©"+var["copyright"]
     help_desc = var["help_description"]
     help_short = var["help_short"]
+    help_spell = var["help_spell"]
     dic_local_help = var["dic_local_help"]
-
 
 dic_global_help={
         "standard":
@@ -42,13 +42,14 @@ dic_global_help={
             "**dis**: disadvantage roll (with modifiers)\n" +\
             "**elvenchad**: elven accuracy feature\n" +\
             "**explode**: explosive dice rolls (with modifiers)\n" +\
-            "**forall**: rolls dice and add modifiers to each result\n"+"¬"*50,
+            "**forall**: rolls dice and add modifiers to each result\n"\
+            "**spell**: know which spells you can throw with !<name>\n"+"¬"*50,
 
         "characters":
             "**pg**: creates a lv 1 random character\n" +\
             "**race**: size generator for d&d 5e\n" +\
             "**stats**: statblock generator for d&d 5e\n" +\
-            "**superstats**: select a statblock among 3\n"+"¬"*50,            
+            "**superstats**: select a statblock among 3\n"+"¬"*50,
         
         "miscellaneous":
             "**member**: sends the number of member of this server as DM\n" +\
@@ -56,6 +57,25 @@ dic_global_help={
             "**redo**: repeat any command by replying to it\n"+\
             "**reset**: reset the rng seed\n"+"¬"*50}
 
+dic_spell_list={
+    "cantrip":
+        'blast (eldritch blast)\n'+\
+        'chilltouch\n' +\
+        'firebolt',
+    "1st-level":
+        'guidingbolt\n'+\
+        'wounds (inflict wounds)\n' +\
+        'sleep',
+    "2nd-level":
+        'shadowblade',
+    "3rd-level":'',
+    "4th-level":'',
+    "5th-level":'',
+    "6th-level":'',
+    "7th-level":'',
+    "8th-level":'',
+    "9th-level":'',
+}
 
 class ServerUtilities:
     """Class containing the utilities for discord servers. It is not an object, but only a 
@@ -67,7 +87,7 @@ class ServerUtilities:
     - Welcome functions -> used to manage custom welcome message
     """
 
-    ### CUSTOM HELP FUNCTION ###
+    ### CUSTOM EMBEDDED MESSAGES ###
 
     def custom_help(terms:tuple, name:str):
         """Custom help function build using embed from discord"""
@@ -93,6 +113,16 @@ class ServerUtilities:
         if em.fields:
             return em
     
+    def spellList():
+        """Returns the embedded message of the spell list"""
+        em = Embed(title=f"Spell list", colour=ACQUA)
+        for key, value in dic_spell_list.items():
+            if value:
+                em.add_field(name=key, value=value, inline=True)
+
+        em.add_field(name="Rules", value=help_spell, inline=False)
+        em.set_footer(text=copyright)
+        return em    
     
     ### SPECIAL MESSAGE FUNCTIONS ###
 

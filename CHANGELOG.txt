@@ -13,6 +13,7 @@ Legend:
 ^ Updated the copyright year
 ^ Moved the command list in external files
 ^ Translated some sentences
+^ Fixed the format os some sentences
 
 ## Version 3.5.0
 + Added `!ts` to rolls saving throws

@@ -1,5 +1,6 @@
 from random import randint
 from math import floor
+from typing import Any
 
 kill_terms = ("I can roll al least 64 dice simultaneously",
               "255 is the maximal amplitude of the die",
@@ -14,8 +15,7 @@ There are two separate set of functions:
 - Dice rolls functions -> used to roll dice (in many ways)
 """
 
-### TYPE-PROCESSING FUNCTIONS ###
-
+##### TYPE-PROCESSING FUNCTIONS #####
 def string2dice(L:list):
     """The first 'main' function of the bot. It prepares a dice-rolls-string from input. Logic behind:
         - Removes only the first +/- and the last +/-, if there were any
@@ -124,7 +124,131 @@ def erase_parethesis(listData:list, key:str):
     return text
 
 
-### DICE ROLLS FUNCTIONS ###
+##### DICE ROLLS FUNCTIONS #####
+def coin() -> str:
+    """Function that tosses a simple coin. It has a chance of 1/257 to return a tie"""
+
+    coinValue = randint(1,257)
+    if coinValue in range(1,129):
+        return 'Testa'
+    elif coinValue in range(129,257):
+        return 'Croce'
+    
+    return 'in piedi'
+
+def elvenacc(L:list):
+    """Function that manages Elven Accuracy feat of D&D 5e. Rolls 2d20 and reroll the lowest. 
+    Then chooses the highest."""
+
+    G = string2dice(L)
+    if isinstance(G, str):
+        return G, None, None, None
+
+    rolledDice = None
+
+    for item in G:
+        tempResults, _ = buildDice(item)
+        if isinstance(tempResults, str):
+            return tempResults, None, None, None
+
+        to_add = 0
+        for i in tempResults:
+            if isinstance(i, list):
+                rolledDice = i
+                continue
+            
+            to_add += i
+    
+    P = randint(1,20)       #extra d20
+    finalResults = rolledDice*(P < min(rolledDice)) + [max(rolledDice),P]*(P >= min(rolledDice))
+
+    return rolledDice, P, finalResults, max(finalResults)+to_add
+
+def evaluateSize(L:list, race:str):
+    """Evaluate the sizes of the character from its table"""
+    roll_h = [randint(1,L[2]) for _ in range(2)]
+    if race in ('elf', 'wood_elf', 'drow'):
+        roll_w = [randint(1,L[3])]
+    elif race in ('halfling', 'gnome'):
+        roll_w = [1]
+    else:
+        roll_w = [randint(1,L[3]) for _ in range(2)]
+    
+    # size generation according to dnd 5e
+    h = L[0] + 2.5*sum(roll_h)
+    w = L[1] + 0.5*sum(roll_h)*sum(roll_w)
+    
+    return h, w
+
+def explosive_dice(L:list):
+    """Function that rolls explosive dice (used in Savage World system).
+    It pulls a die and if the result is the maximal amplitude of it, it pulls another one, 
+    recursively."""
+
+    G = string2dice(L)
+    if isinstance(G, str):
+        return G, None
+
+    finalResults, sums = [], []
+
+    for item in G:
+        tempResults, die = buildDice(item)
+        if isinstance(tempResults, str):
+            return tempResults, None
+
+        localTotal = 0
+        for i in tempResults:
+            if isinstance(i, list) and len(i)==1:
+                shian = _whileExplosion(i[0],die[0])
+                finalResults.append(shian)
+                localTotal += sum(shian)
+                continue
+            
+            localTotal += i
+            
+        sums.append(localTotal)
+
+    finalResults=erase_parethesis(finalResults,'')
+
+    return finalResults,sums
+
+def forall(L:list):
+    """Function that rolls n dice and add modifiers to ALL results without sum them together"""
+
+    G = string2dice(L)
+    if isinstance(G, str):
+        return G, None
+    
+    #a questo punto hai una lista di stringhe compatte
+    rolledResults, moddedResults = [], []
+
+    for item in G:
+        tempResults, _ = buildDice(item)
+        if isinstance(tempResults, str):
+            return tempResults, None
+
+        #preparing the output item
+        to_add = 0
+        rolledResults.append(tempResults[0])
+
+        for i in range(1,len(tempResults)):
+            if isinstance(tempResults[i], list):
+                rolledResults.append(tempResults[i])
+                to_add += sum(tempResults[i])
+                continue
+            
+            to_add += tempResults[i]
+
+        moddedResults.append([k+to_add for k in tempResults[0]])
+
+    rolledResults = erase_parethesis(rolledResults,'')
+    return rolledResults,str(moddedResults)
+
+def reset_seed():
+    """Function that reset the rng seed"""
+    from random import seed
+    seed()
+    return
 
 def roll(how_many:int, amplitude:int, B:bool) -> list:
     """This is the function that pulls all the dice of the form 'AdB'.\n
@@ -164,6 +288,47 @@ def standard_roll(L:list):
     finalResults = erase_parethesis(finalResults,'')
 
     return finalResults,S  
+
+def stats(amount:int):
+    """Function that generates up to 6 stats for D&D 5e. It rolls 4d6 and sums the three highest.\n
+    Automatically convert the requested quantity in
+        - a 6 if amount is above 6 or below -6
+        - the nearest integer to itself and makes it positive 
+    """
+    outputStr, serie = [], []
+    if amount > 6 or amount < -6:
+        amount = 6
+    else:
+        amount = abs(int(amount))
+    
+    for i in range(0,amount):
+        stats = roll(4,6,True)
+        remainingValues = stats.pop(stats.index(min(stats)))  #remove min value of stats
+        outputStr.append(f"`Stat {i+1}:\t{stats+[remainingValues]}\t{sum(stats)} -> {_getModifier(stats)}`")
+        serie.append(sum(stats))
+
+    # if someone wanted to know the variance from the standard series (only in !stats 6)
+    if amount == 6:
+        stdSeries = (15,14,13,12,10,8)
+        return outputStr,serie,sum(serie)-sum(stdSeries)
+
+    return outputStr,serie,None
+
+def superstats() -> str:
+    """Function that performs three times !stats, returning a fancy table to the user."""
+
+    tableStr = ""
+    for i in range(6):
+        # roll dice and pop the least value
+        R1, R2, R3 = roll(4,6,True), roll(4,6,True), roll(4,6,True)
+        R1.pop(R1.index(min(R1)))
+        R2.pop(R2.index(min(R2)))
+        R3.pop(R3.index(min(R3)))
+
+        tableStr += f"Stat {i+1}:\t\t`{sum(R1)} -> {_getModifier(R1)}\t" + \
+                    f"{sum(R2)} -> {_getModifier(R2)}\t{sum(R3)} -> {_getModifier(R3)}`\n"
+
+    return tableStr[:-1]
 
 def van_svg(L:list, term:str, name:str):
     """Function that manages advantage/disavantage rolls for D&D.\n
@@ -218,126 +383,30 @@ def van_svg(L:list, term:str, name:str):
 
     return finalResults, singleSums, ans
 
-def coin() -> str:
-    """Function that tosses a simple coin. It has a chance of 1/257 to return a tie"""
 
-    coinValue = randint(1,257)
-    if coinValue in range(1,129):
-        return 'Testa'
-    elif coinValue in range(129,257):
-        return 'Croce'
-    
-    return 'in piedi'
-
+##### AUXILIARY METHODS #####
 def _getModifier(numberList: list[int]) -> str:
     """Function that writes the sign of a number string"""
     modifier = floor((sum(numberList)-10)/2)
     return '+'*(modifier > 0) + str(modifier)
 
-def stats(amount:int):
-    """Function that generates up to 6 stats for D&D 5e. It rolls 4d6 and sums the three highest.\n
-    Automatically convert the requested quantity in
-        - a 6 if amount is above 6 or below -6
-        - the nearest integer to itself and makes it positive 
-    """
+def _getCantripLevel(level: int) -> int:
+    """Returns the number of dice to be rolled for a cantrip according to the pg level"""
+    return 1 + (level >= 5) + (level >= 11) + (level >= 17)
 
-    output, serie = [], []
-    if amount > 6 or amount < -6:
-        amount = 6
-        output.append("Input changed to value 6")
-    else:
-        amount = abs(int(amount))
-    
-    for i in range(0,amount):
-        stats = roll(4,6,True)
-        remainingValues = stats.pop(stats.index(min(stats)))  #remove min value of stats
-        output.append(f"Stat {i+1}:\t\t`{stats+[remainingValues]}`\t`{sum(stats)} -> {_getModifier(stats)}`")
-        serie.append(sum(stats))
+def _getShadowBlade(level: int) -> int:
+    """Returns the number of dice to be rolled for shadow blade spell according to the
+    used slot level"""
+    return 2 + (level >= 3) + (level >= 5) + (level >= 7)
 
-    # if someone wanted to know the variance from the standard series (only in !stats 6)
-    if amount == 6:
-        stdSeries = (15,14,13,12,10,8)
-        return output,sum(serie)-sum(stdSeries)
+def _buildSpellSentence(author:str, level:int, spellName:str, rolled:list[int], dmgType: str) -> str:
+    """Returns the output string of spell casting"""
+    if spellName != 'sleep':
+        dmgType += ' damage'
 
-    return output,None
+    return f"{author}'s level {level} {spellName}: `{rolled} -> {sum(rolled)} {dmgType}`"
 
-def superstats() -> str:
-    """Function that performs three times !stats, returning a fancy table to the user."""
-
-    tableStr = ""
-    for i in range(6):
-        # roll dice and pop the least value
-        R1, R2, R3 = roll(4,6,True), roll(4,6,True), roll(4,6,True)
-        R1.pop(R1.index(min(R1)))
-        R2.pop(R2.index(min(R2)))
-        R3.pop(R3.index(min(R3)))
-
-        tableStr += f"Stat {i+1}:\t\t`{sum(R1)} -> {_getModifier(R1)}`\t\t" + \
-                    f"`{sum(R2)} -> {_getModifier(R2)}`\t\t`{sum(R3)} -> {_getModifier(R3)}`\n"
-
-    return tableStr[:-1]
-
-def forall(L:list):
-    """Function that rolls n dice and add modifiers to ALL results without sum them together"""
-
-    G = string2dice(L)
-    if isinstance(G, str):
-        return G, None
-    
-    #a questo punto hai una lista di stringhe compatte
-    rolledResults, moddedResults = [], []
-
-    for item in G:
-        tempResults, _ = buildDice(item)
-        if isinstance(tempResults, str):
-            return tempResults, None
-
-        #preparing the output item
-        to_add = 0
-        rolledResults.append(tempResults[0])
-
-        for i in range(1,len(tempResults)):
-            if isinstance(tempResults[i], list):
-                rolledResults.append(tempResults[i])
-                to_add += sum(tempResults[i])
-                continue
-            
-            to_add += tempResults[i]
-
-        moddedResults.append([k+to_add for k in tempResults[0]])
-
-    rolledResults = erase_parethesis(rolledResults,'')
-    return rolledResults,str(moddedResults)
-
-def elvenacc(L:list):
-    """Function that manages Elven Accuracy feat of D&D 5e. Rolls 2d20 and reroll the lowest. 
-    Then chooses the highest."""
-
-    G = string2dice(L)
-    if isinstance(G, str):
-        return G, None, None, None
-
-    rolledDice = None
-
-    for item in G:
-        tempResults, _ = buildDice(item)
-        if isinstance(tempResults, str):
-            return tempResults, None, None, None
-
-        to_add = 0
-        for i in tempResults:
-            if isinstance(i, list):
-                rolledDice = i
-                continue
-            
-            to_add += i
-    
-    P = randint(1,20)       #extra d20
-    finalResults = rolledDice*(P < min(rolledDice)) + [max(rolledDice),P]*(P >= min(rolledDice))
-
-    return rolledDice, P, finalResults, max(finalResults)+to_add
-
-def explode(L:int, amp:int) -> list[int]:
+def _whileExplosion(L:int, amp:int) -> list[int]:
     """Auxiliary function to roll explosive dice"""
     listExplosions = [L]
     while listExplosions[-1] == amp:
@@ -345,56 +414,29 @@ def explode(L:int, amp:int) -> list[int]:
 
     return listExplosions
 
-def explosive_dice(L:list):
-    """Function that rolls explosive dice (used in Savage World system).
-    It pulls a die and if the result is the maximal amplitude of it, it pulls another one, 
-    recursively."""
+def coerceSlotLevel(level:Any, base: int) -> int:
+    """Coerces the level of the spell to the base value or castes it to int"""
+    try:
+        coerced = int(''.join(level))
+        if coerced >= 9:
+            coerced = 9
+        elif coerced < base:
+            coerced = base
+    except:
+        coerced = base
 
-    G = string2dice(L)
-    if isinstance(G, str):
-        return G, None
+    return coerced
 
-    finalResults, sums = [], []
+def coercePlayerLevel(level:Any) -> int:
+    """Coerces the level of the spell to the base value or castes it to int"""
+    print(level, type(level))
+    try:
+        coerced = int(''.join(level))
+        if coerced >= 20:
+            coerced = 20
+        elif coerced < 1:
+            coerced = 1
+    except:
+        coerced = 1
 
-    for item in G:
-        tempResults, die = buildDice(item)
-        if isinstance(tempResults, str):
-            return tempResults, None
-
-        localTotal = 0
-        for i in tempResults:
-            if isinstance(i, list) and len(i)==1:
-                shian = explode(i[0],die[0])
-                finalResults.append(shian)
-                localTotal += sum(shian)
-                continue
-            
-            localTotal += i
-            
-        sums.append(localTotal)
-
-    finalResults=erase_parethesis(finalResults,'')
-
-    return finalResults,sums
-
-def reset_seed():
-    """Function that reset the rng seed"""
-    from random import seed
-    seed()
-    return
-
-def evaluateSize(L:list, race:str):
-    """Evaluate the sizes of the character from its table"""
-    roll_h = [randint(1,L[2]) for _ in range(2)]
-    if race in ('elf', 'wood_elf', 'drow'):
-        roll_w = [randint(1,L[3])]
-    elif race in ('halfling', 'gnome'):
-        roll_w = [1]
-    else:
-        roll_w = [randint(1,L[3]) for _ in range(2)]
-    
-    # size generation according to dnd 5e
-    h = L[0] + 2.5*sum(roll_h)
-    w = L[1] + 0.5*sum(roll_h)*sum(roll_w)
-    
-    return h, w
+    return coerced

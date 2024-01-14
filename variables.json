@@ -4,6 +4,8 @@
     "help_description": "Type !help [command] for more info on a specific command; works also with a list of commands separated by a blank space.",
 
     "help_short": "Type !help to get the list of available commands.", 
+
+    "help_spell": "To automatically increment the dice to roll you can specity the **character level** for cantrips or the **used spell slot** for normal spells.",
     
     "welcome_messages":[
         "Benvenuto su Otaku's House, {} :wave:",
@@ -78,6 +80,7 @@
         "race":"Generates race height and weight according to d&d 5e table. The syntax is **!race name**, where name is the race you have (in italian or english)",
         "redo":"Repeat any command. You can activate it by replying to it and writing !redo.",
         "reset":"Reset the rng seed.",
+        "spell":"Get the list of available spells you can cast by send !<spell_name> <lv>.",
         "stats":"Rolls 4 dice and sums the three highest. The syntax is **!stats x**, where x=many stats to generate (max 6).",
         "superstats":"Generates three times six stats to grant the user to pick one combination among 3",
         "tira":"Rolls multiple dice (with also modifiers). The syntax is **!tira nds+c**, where n=number of dice, s=type of dice (among 2 and 256) and c=modifiers.\nIf the user puts a +/- beetween dice it will sum the results, if it's a blank space it will return separated results. Isolated numbers will be ignored.",
@@ -115,5 +118,5 @@
         "tiefling": ["tiefling"]
     },
 
-    "classes":["Artificier", "Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"]
+    "classes":["artificier", "barbarian", "bard", "cleric", "druid", "fighter", "monk", "paladin", "ranger", "rogue", "sorcerer", "warlock", "wizard"]
 }

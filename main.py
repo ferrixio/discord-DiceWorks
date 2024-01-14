@@ -20,19 +20,11 @@ bot.remove_command("help")
 async def on_ready():
     await bot.load_extension("cmdStandard")     # load roll-commands
     print("Standard commands loaded")
+    await bot.load_extension("cmdSpells")     # load spell-commands
+    print("Spells loaded")
     owner = await bot.fetch_user(getenv('FERRI'))   # retrieve owner user by its ID
     await owner.send("The bot has successfully connected to Discord")
     print("Bot is online")
-
-
-@bot.group(invoke_without_permission=True)
-async def help(ctx,*arg):
-    """Custom help command with Embed. Also it sends a memo to the owner"""
-    em = ServerUtilities.custom_help(arg, bot.user.name)
-    await ctx.channel.send(embed=em)
-    if ctx.author.id == int(getenv('FERRI')):
-        await ctx.author.send('Ricordati che hai anche il gruppo ferri guilds/upgrade/send')
-
 
 @bot.event
 async def on_member_join(member):
@@ -44,7 +36,6 @@ async def on_member_join(member):
     
     elif member.guild.id == int(getenv('TEST_GUILD')): 
         await bot.get_channel(int(getenv('chat_in_test'))).send(sentence)
-
 
 @bot.event
 async def on_message(ctx):
@@ -65,8 +56,24 @@ async def on_message(ctx):
     #needs to make the bot realise that other commands may arrive
     await bot.process_commands(ctx)
 
+@bot.event
+async def on_command_error(ctx, error):
+    """Method that handles the errors"""
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send(f"Invalid command")
+    else:
+        owner = int(getenv('FERRI'))
+        await ctx.author.send(error)
 
 ##### UTILITY COMMAND LIST #####
+@bot.group(invoke_without_permission=True)
+async def help(ctx,*arg):
+    """Custom help command with Embed. Also it sends a memo to the owner"""
+    em = ServerUtilities.custom_help(arg, bot.user.name)
+    await ctx.channel.send(embed=em)
+    if ctx.author.id == int(getenv('FERRI')):
+        await ctx.author.send('Ricordati che hai anche il gruppo ferri guilds/upgrade/send')
+
 @bot.command()
 async def member(ctx):
     """Command to count the users in current guild. Doesn't include bots"""
@@ -76,7 +83,11 @@ async def member(ctx):
     
     await ctx.author.send(f'Number of members in server {ctx.guild.name} = '+\
                           f'{len([m for m in ctx.guild.members if not m.bot])}')
-
+    
+@bot.command()
+async def ping(ctx):
+    """Command that sends the bot latency"""
+    await ctx.channel.send(f"Bot current latency = {round(bot.latency, 4)} sec")
 
 @bot.command()
 async def redo(ctx):
@@ -91,11 +102,11 @@ async def redo(ctx):
         ctx.command = bot.get_command(t[0].replace('!',''))
         await ctx.invoke(ctx.command, *t[1:])
 
-
 @bot.command()
-async def ping(ctx):
-    """Command that sends the bot latency"""
-    await ctx.channel.send(f"Bot current latency = {round(bot.latency, 4)} sec")
+async def spell(ctx):
+    """Prints the list of available spells and their syntax to be casted"""
+    em = ServerUtilities.spellList()
+    await ctx.channel.send(embed=em)
     
     
 ##### OWNER-ONLY COMMAND GROUP #####

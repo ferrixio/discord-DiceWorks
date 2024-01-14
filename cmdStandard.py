@@ -1,6 +1,6 @@
 from discord.ext import commands
 from json import load
-from random import choice, shuffle
+from random import choice
 import diceBlock as DB
 
 @commands.command()       
@@ -16,7 +16,7 @@ async def adv(ctx, *arg):
             #non mettere la virgola prima di totale perché c'è già nell'output
             if len(S)==1:
                 S=S[0]
-            await ctx.channel.send(f'{funny} {R} quindi {S}')
+            await ctx.channel.send(f'{funny} {R} `->` {S}')
 
     except:
         await ctx.channel.send("Type error")
@@ -54,7 +54,7 @@ async def dis(ctx, *arg):
             #non mettere la virgola prima di totale perché c'è già nell'output
             if len(S) == 1:
                 S = S[0]
-            await ctx.channel.send(f'{funny} {R} quindi {S}')
+            await ctx.channel.send(f'{funny} {R} `->` {S}')
 
     except:
         await ctx.channel.send("Type error")  
@@ -108,7 +108,7 @@ async def forall(ctx,*arg):
         else:
             if len(S) == 1:
                 S = S[0]
-            await ctx.channel.send(f"{ctx.message.author.global_name}'s forall: {R} totale: {S[1:-1]}")
+            await ctx.channel.send(f"{ctx.message.author.global_name}'s forall: {R} `->` {S[1:-1]}")
 
     except:
         await ctx.channel.send("Type error")
@@ -118,7 +118,7 @@ async def forall(ctx,*arg):
 async def pg(ctx):
     """Generates a pg (statblock and sizes) according to dnd 5e"""
     
-    statBlock, distance = DB.stats(6)  # generates the statblock in standard format
+    statBlock, _, distance = DB.stats(6)  # generates the statblock in standard format
     statText = '\n'.join(statBlock)
 
     # selects race, the class and generates sizes
@@ -129,7 +129,7 @@ async def pg(ctx):
     race = choice(list(var["dimension_table"]))
     height, weight = DB.evaluateSize(var["dimension_table"][race], race)
 
-    outputStr = f"{ctx.message.author.global_name}'s random character: Lv 1 {dndClass}, {race} " +\
+    outputStr = f"{ctx.message.author.global_name}'s random character:\nLv 1\t{dndClass}\t{race} " +\
         f"({height} cm and {weight} kg)\n{statText}\nDistance from standard serie = {distance}"
 
     await ctx.channel.send(outputStr)
@@ -159,21 +159,22 @@ async def reset(ctx):
 
 
 @commands.command()
-async def stats(ctx, arg):
+async def stats(ctx, *arg):
     """Command to generate stats for dnd 5e"""
 
     try:
         text = ""
-        R,S = DB.stats(int(arg))
-        for i in R:
-            text += i
-            copy = i.split('\t')   #looking for 18 & 3. Char " x" is needed because of the nature of command split 
-            text = text + ("\t :four_leaf_clover:")*(copy[1] == " 18") + ("\t :broken_heart:")*(copy[1] == " 3") + "\n"
+        if not arg:
+            arg = ('6',)
+        R,serie, dist = DB.stats(int(''.join(arg)))
+        for i in range(len(R)):
+            text += R[i]
+            text = text + ("\t :four_leaf_clover:")*(serie[i] == 18) + ("\t :broken_heart:")*(serie[i] == 3)+"\n"
         
-        await ctx.channel.send(f"{ctx.message.author.global_name}, statblock" + text)
+        await ctx.channel.send(f"{ctx.message.author.global_name}'s requested statblock\n" + text)
 
-        if S:
-            await ctx.channel.send(f'Distance from standard serie = {S}')
+        if dist:
+            await ctx.channel.send(f'Distance from standard serie = {dist}')
 
     except:
         await ctx.channel.send("Type error")
@@ -198,7 +199,7 @@ async def tira(ctx, *arg):
             #non mettere la virgola prima di totale perché c'è già nell'output
             if len(S)==1:
                 S=S[0]
-            await ctx.channel.send(f"Tiro di {ctx.message.author.global_name}: {R} totale: {S}")
+            await ctx.channel.send(f"Tiro di {ctx.message.author.global_name}: {R} `->` {S}")
 
     except:
         await ctx.channel.send("Type error")
@@ -212,7 +213,7 @@ async def tpc(ctx, *arg):
         R,S = DB.standard_roll(A)
         if len(S)==1:
             S=S[0]
-        await ctx.channel.send(f"{ctx.message.author.global_name}'s tpc: {R} totale: {S}")
+        await ctx.channel.send(f"{ctx.message.author.global_name}'s tpc: {R} `->` {S}")
 
     except:
         await ctx.channel.send("Type error")
