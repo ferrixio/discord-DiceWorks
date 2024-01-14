@@ -14,6 +14,7 @@ Legend:
 ^ Moved the command list in external files
 ^ Translated some sentences
 ^ Fixed the format os some sentences
+^ Handled the `on_command_error` event
 
 ## Version 3.5.0
 + Added `!ts` to rolls saving throws
