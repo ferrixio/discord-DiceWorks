@@ -26,7 +26,7 @@ This bot can do many things:
     > advantage & disavantage rolls
     > saving throws
     > toss coins
-    > stats generator for D&ampD 5e
+    > stats and sizes generator for D&ampD 5e
     > explosive rolls
 
 Dice Generator is currently run on a server, and if you want to add to your server (and also customize it) just write to me.

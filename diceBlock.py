@@ -377,13 +377,11 @@ def explosive_dice(L:list):
 
     return finalResults,sums
 
-
 def reset_seed():
     """Function that reset the rng seed"""
     from random import seed
     seed()
     return
-
 
 def evaluateSize(L:list, race:str):
     """Evaluate the sizes of the character from its table"""

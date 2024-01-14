@@ -42,10 +42,13 @@ dic_global_help={
             "**dis**: disadvantage roll (with modifiers)\n" +\
             "**elvenchad**: elven accuracy feature\n" +\
             "**explode**: explosive dice rolls (with modifiers)\n" +\
-            "**forall**: rolls dice and add modifiers to each result\n" +\
-            "**stats**: stats generator for d&d 5e\n" +\
-            "**superstats**: select a statblock among 3\n" +\
-            "**race**: size generator for d&d 5e"+"¬"*50,
+            "**forall**: rolls dice and add modifiers to each result\n"+"¬"*50,
+
+        "characters":
+            "**pg**: creates a lv 1 random character\n" +\
+            "**race**: size generator for d&d 5e\n" +\
+            "**stats**: statblock generator for d&d 5e\n" +\
+            "**superstats**: select a statblock among 3\n"+"¬"*50,            
         
         "miscellaneous":
             "**member**: sends the number of member of this server as DM\n" +\
@@ -72,6 +75,7 @@ class ServerUtilities:
             em = Embed(title=f"{name}'s command list", colour=ACQUA, description=help_desc)
             em.add_field(name="Standard tools", value=dic_global_help["standard"], inline=False)
             em.add_field(name="Advanced tools", value=dic_global_help["advanced"], inline=False)
+            em.add_field(name="Character generation", value=dic_global_help["characters"], inline=False)
             em.add_field(name="Miscellaneous", value=dic_global_help["miscellaneous"])
     
         elif "full" in terms or "all" in terms:
