@@ -18,13 +18,9 @@ bot.remove_command("help")
 ##### BEGINNING AND EVENT #####
 @bot.event
 async def on_ready():
-    await bot.load_extension("cmdStandard")     # load roll-commands
-    print("Standard commands loaded")
-    await bot.load_extension("cmdSpells")     # load spell-commands
-    print("Spells loaded")
+    await bot.load_extension("commands")     # load commands
     owner = await bot.fetch_user(getenv('FERRI'))   # retrieve owner user by its ID
     await owner.send("The bot has successfully connected to Discord")
-    print("Bot is online")
 
 @bot.event
 async def on_member_join(member):
@@ -62,8 +58,8 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.send(f"Invalid command")
     else:
-        owner = int(getenv('FERRI'))
-        await ctx.author.send(error)
+        owner = await bot.fetch_user(getenv('FERRI'))
+        await owner.send(error)
 
 ##### UTILITY COMMAND LIST #####
 @bot.group(invoke_without_permission=True)

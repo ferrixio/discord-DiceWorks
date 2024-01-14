@@ -1,9 +1,11 @@
 from discord.ext import commands
+from random import randint
 from json import load
 from random import choice
 import diceBlock as DB
 
-@commands.command()       
+##### ROLLS COMMANDS #####
+@commands.command()
 async def adv(ctx, *arg):
     """Command to resolve advantage rolls"""
 
@@ -21,15 +23,13 @@ async def adv(ctx, *arg):
     except:
         await ctx.channel.send("Type error")
 
-
 @commands.command()
 async def cento(ctx):
     """Command to roll only 1d100"""
     from random import randint
     await ctx.channel.send(f"{ctx.message.author.global_name}'s d100: `[{randint(1,100)}]`")
 
-
-@commands.command()       
+@commands.command()
 async def coin(ctx):
     """Command to toss a coin"""
 
@@ -40,8 +40,7 @@ async def coin(ctx):
     
     await ctx.channel.send(f"{ctx.message.author.global_name}, è uscito `{c}`")
 
-
-@commands.command()       
+@commands.command()
 async def dis(ctx, *arg):
     """Command to resolve disavantage rolls"""
 
@@ -58,7 +57,6 @@ async def dis(ctx, *arg):
 
     except:
         await ctx.channel.send("Type error")  
-
 
 @commands.command()
 async def elvenchad(ctx,*arg):
@@ -78,7 +76,6 @@ async def elvenchad(ctx,*arg):
     except:
         await ctx.channel.send("Type error")
 
-
 @commands.command()
 async def explode(ctx,*arg):
     """Command to roll explosive dice"""
@@ -96,7 +93,6 @@ async def explode(ctx,*arg):
     except:
         await ctx.channel.send("Type error")
 
-
 @commands.command()
 async def forall(ctx,*arg):
     """Command to roll multuple dice and add modifiers to each roll"""
@@ -112,7 +108,6 @@ async def forall(ctx,*arg):
 
     except:
         await ctx.channel.send("Type error")
-
 
 @commands.command()
 async def pg(ctx):
@@ -134,7 +129,6 @@ async def pg(ctx):
 
     await ctx.channel.send(outputStr)
 
-
 @commands.command()
 async def race(ctx, *arg):
     """Generates the height and weight of specified race"""
@@ -150,13 +144,11 @@ async def race(ctx, *arg):
     except:
         await ctx.channel.send("Type error")
 
-
 @commands.command()
 async def reset(ctx):
     """Command to reset the rng seed"""
     DB.reset_seed()
     await ctx.channel.send(f"Random number generator seed reset by {ctx.message.author.global_name}")
-
 
 @commands.command()
 async def stats(ctx, *arg):
@@ -179,14 +171,12 @@ async def stats(ctx, *arg):
     except:
         await ctx.channel.send("Type error")
         
-
 @commands.command()
 async def superstats(ctx):
     """Command to roll 3 set of 6-stats simultaneously"""
     
     await ctx.channel.send(f"{ctx.message.author.global_name}'s superstats:\n{DB.superstats()}")
 
-    
 @commands.command()
 async def tira(ctx, *arg):
     """Standard command to roll dice"""
@@ -204,7 +194,6 @@ async def tira(ctx, *arg):
     except:
         await ctx.channel.send("Type error")
 
-
 @commands.command()       
 async def tpc(ctx, *arg):
     """Command to roll only 1d20"""
@@ -217,7 +206,6 @@ async def tpc(ctx, *arg):
 
     except:
         await ctx.channel.send("Type error")
-
 
 @commands.command()
 async def ts(ctx, *arg):
@@ -256,10 +244,92 @@ async def ts(ctx, *arg):
         await ctx.channel.send("Type error")
 
 
-# this method must be here. It adds the commands to the bot
+##### CANTRIP SPELLS #####
+@commands.command()
+async def blast(ctx, *lv):
+    """Casts eldritch blast. lv is the player level.
+    This eldritch blast comes from dnd 5e as evocation cantrip"""
+    level = DB.coercePlayerLevel(lv)
+    await ctx.channel.send(DB._buildSpellSentence(author=ctx.message.author.global_name,
+                                                  level=level,
+                                                  spellName='eldritch blast',
+                                                  rolled=[randint(1,10) for _ in range(DB._getCantripLevel(level))],
+                                                  dmgType='force'))
+
+@commands.command()
+async def chilltouch(ctx, *lv):
+    """Casts chill touch. lv is the player level.
+    This eldritch blast comes from dnd 5e as necromancy cantrip"""
+    level = DB.coercePlayerLevel(lv)
+    await ctx.channel.send(DB._buildSpellSentence(author=ctx.message.author.global_name,
+                                                  level=level,
+                                                  spellName='chill touch',
+                                                  rolled=[randint(1,8) for _ in range(DB._getCantripLevel(level))],
+                                                  dmgType='necrotic'))
+
+@commands.command()
+async def firebolt(ctx, *lv):
+    """Casts fire bolt. lv is the player level.
+    This fire bolt comes from dnd 5e as evocation cantrip"""
+    level = DB.coercePlayerLevel(lv)
+    await ctx.channel.send(DB._buildSpellSentence(author=ctx.message.author.global_name,
+                                                  level=level,
+                                                  spellName='fire bolt',
+                                                  rolled=[randint(1,10) for _ in range(DB._getCantripLevel(level))],
+                                                  dmgType='fire'))
+
+##### 1ST LEVEL SPELLS #####
+@commands.command()
+async def guidingbolt(ctx, *lv):
+    """Casts fire bolt. lv is the used spell slot.
+    This guiding bolt comes from dnd 5e as 1st-level evocation"""
+    level = DB.coerceSlotLevel(lv, 1)
+    await ctx.channel.send(DB._buildSpellSentence(author=ctx.message.author.global_name,
+                                                  level=level,
+                                                  spellName='guiding bolt',
+                                                  rolled=[randint(1,6) for _ in range(3+level)],
+                                                  dmgType='fire'))
+
+@commands.command()
+async def wounds(ctx, *lv):
+    """Casts inflict wounds. lv is the used spell slot.
+    This inflict wounds comes from dnd 5e as 1st-level necromancy"""
+    level = DB.coerceSlotLevel(lv, 1)
+    await ctx.channel.send(DB._buildSpellSentence(author=ctx.message.author.global_name,
+                                                  level=level,
+                                                  spellName='inflict wounds',
+                                                  rolled=[randint(1,10) for _ in range(2+level)],
+                                                  dmgType='necrotic'))
+    
+@commands.command()
+async def sleep(ctx, *lv):
+    """Casts sleep. lv is the used spell slot.
+    This sleep comes from dnd 5e as 1st-level enchantment"""
+    level = DB.coerceSlotLevel(lv, 1)
+    await ctx.channel.send(DB._buildSpellSentence(author=ctx.message.author.global_name,
+                                                  level=level,
+                                                  spellName='sleep',
+                                                  rolled=[randint(1,8) for _ in range(3+2*level)],
+                                                  dmgType='hit points'))
+
+##### 2ND LEVEL SPELLS #####
+@commands.command()
+async def shadowblade(ctx, *lv):
+    """Casts shadow blade. lv is the used spell slot.
+    This inflict wounds comes from dnd 5e as 2nd-level illusion"""
+    level = DB.coerceSlotLevel(lv, 2)
+    await ctx.channel.send(DB._buildSpellSentence(author=ctx.message.author.global_name,
+                                                  level=level,
+                                                  spellName='shadow blade',
+                                                  rolled=[randint(1,8) for _ in range(DB._getShadowBlade(level))],
+                                                  dmgType='psychic'))
+
+
+# This method must be here. It adds the commands to the bot
 async def setup(bot):
     CMD_LIST = (adv, cento, coin, dis, elvenchad, explode, forall, pg, race, reset, stats,
                 superstats, tira, tpc, ts)
+    SPELL_LIST = (blast, chilltouch, firebolt, guidingbolt, wounds, shadowblade, sleep)
     
-    for i in CMD_LIST:
+    for i in CMD_LIST+SPELL_LIST:
         bot.add_command(i)
