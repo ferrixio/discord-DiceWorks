@@ -28,6 +28,7 @@ with open("variables.json", "r") as f:
     help_short = var["help_short"]
     help_spell = var["help_spell"]
     dic_local_help = var["dic_local_help"]
+    dic_spell_list = var["spell_list"]
 
 dic_global_help={
         "standard":
@@ -57,25 +58,6 @@ dic_global_help={
             "**redo**: repeat any command by replying to it\n"+\
             "**reset**: reset the rng seed\n"+"¬"*50}
 
-dic_spell_list={
-    "cantrip":
-        'blast (eldritch blast)\n'+\
-        'chilltouch\n' +\
-        'firebolt',
-    "1st-level":
-        'guidingbolt\n'+\
-        'wounds (inflict wounds)\n' +\
-        'sleep',
-    "2nd-level":
-        'shadowblade',
-    "3rd-level":'',
-    "4th-level":'',
-    "5th-level":'',
-    "6th-level":'',
-    "7th-level":'',
-    "8th-level":'',
-    "9th-level":'',
-}
 
 class ServerUtilities:
     """Class containing the utilities for discord servers. It is not an object, but only a 
@@ -92,7 +74,7 @@ class ServerUtilities:
     def custom_help(terms:tuple, name:str):
         """Custom help function build using embed from discord"""
         if terms == ():
-            em = Embed(title=f"{name}'s command list", colour=ACQUA, description=help_desc)
+            em = Embed(title=f":notebook_with_decorative_cover: {name}'s command list", colour=ACQUA, description=help_desc)
             em.add_field(name="Standard tools", value=dic_global_help["standard"], inline=False)
             em.add_field(name="Advanced tools", value=dic_global_help["advanced"], inline=False)
             em.add_field(name="Character generation", value=dic_global_help["characters"], inline=False)
@@ -115,10 +97,10 @@ class ServerUtilities:
     
     def spellList():
         """Returns the embedded message of the spell list"""
-        em = Embed(title=f"Spell list", colour=ACQUA)
+        em = Embed(title=f":scroll: Spell list", colour=ACQUA)
         for key, value in dic_spell_list.items():
             if value:
-                em.add_field(name=key, value=value, inline=True)
+                em.add_field(name=key, value='\n'.join(value), inline=True)
 
         em.add_field(name="Rules", value=help_spell, inline=False)
         em.set_footer(text=copyright)

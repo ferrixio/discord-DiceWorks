@@ -6,6 +6,7 @@ from discord.ext import commands
 from os import getenv
 from dotenv import load_dotenv
 from utilities import ServerUtilities
+from time import time
 
 load_dotenv()
 TOKEN = getenv('DISCORD_TOKEN')
@@ -18,9 +19,11 @@ bot.remove_command("help")
 ##### BEGINNING AND EVENT #####
 @bot.event
 async def on_ready():
+    start = time()
     await bot.load_extension("commands")     # load commands
+    print('Command extension loaded')
     owner = await bot.fetch_user(getenv('FERRI'))   # retrieve owner user by its ID
-    await owner.send("The bot has successfully connected to Discord")
+    await owner.send(f"The bot has successfully connected to Discord in {round(time()-start, 3)} seconds")
 
 @bot.event
 async def on_member_join(member):
@@ -43,11 +46,12 @@ async def on_message(ctx):
         response=ServerUtilities.master(ctx.author.global_name,ctx.author.id)
         await ctx.channel.send(response)
 
-    elif "fate" in ctx.content:
-        await ctx.channel.send(f'Le fate sono sempre dalla tua parte, {ctx.author.global_name} :smirk:')
+    # old easter-eggs
+    # elif "fate" in ctx.content:
+    #     await ctx.channel.send(f'Le fate sono sempre dalla tua parte, {ctx.author.global_name} :smirk:')
 
-    elif "soap" in ctx.content:
-        await ctx.channel.send("Sto piangendo dalla gioia! È stato davvero eccezionale, bellissimo, MERAVIGLIOSO!!! :cry:")
+    # elif "soap" in ctx.content:
+    #     await ctx.channel.send("Sto piangendo dalla gioia! È stato davvero eccezionale, bellissimo, MERAVIGLIOSO!!! :cry:")
 
     #needs to make the bot realise that other commands may arrive
     await bot.process_commands(ctx)
@@ -61,6 +65,7 @@ async def on_command_error(ctx, error):
         owner = await bot.fetch_user(getenv('FERRI'))
         await owner.send(error)
 
+
 ##### UTILITY COMMAND LIST #####
 @bot.group(invoke_without_permission=True)
 async def help(ctx,*arg):
@@ -70,7 +75,7 @@ async def help(ctx,*arg):
     if ctx.author.id == int(getenv('FERRI')):
         await ctx.author.send('Ricordati che hai anche il gruppo ferri guilds/upgrade/send')
 
-@bot.command()
+@bot.command(aliases=('membri', 'members'))
 async def member(ctx):
     """Command to count the users in current guild. Doesn't include bots"""
     if ctx.guild is None:
@@ -85,12 +90,12 @@ async def ping(ctx):
     """Command that sends the bot latency"""
     await ctx.channel.send(f"Bot current latency = {round(bot.latency, 4)} sec")
 
-@bot.command()
+@bot.command(aliases=('ripeti', 'again', 'repeat'))
 async def redo(ctx):
     """Command to redo another command"""
     message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
     t = message.content.split()
-    if t[0] == '!redo':
+    if t[0] in ('!redo','!ripeti', '!again', '!repeat'):
         await ctx.channel.send("You can't redo a redo")
     elif '!' not in t[0]:
         await ctx.channel.send("No command to redo")
@@ -98,7 +103,7 @@ async def redo(ctx):
         ctx.command = bot.get_command(t[0].replace('!',''))
         await ctx.invoke(ctx.command, *t[1:])
 
-@bot.command()
+@bot.command(aliases=('spells',))
 async def spell(ctx):
     """Prints the list of available spells and their syntax to be casted"""
     em = ServerUtilities.spellList()

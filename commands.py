@@ -4,35 +4,36 @@ from json import load
 from random import choice
 import diceBlock as DB
 
+var = load(open("variables.json", "r"))
+
 ##### ROLLS COMMANDS #####
-@commands.command()
+@commands.command(aliases=('vantaggio',))
 async def adv(ctx, *arg):
     """Command to resolve advantage rolls"""
-
     try:
         R,S,funny = DB.van_svg(list(arg),"adv",ctx.message.author.global_name)
-    
-        if not S:
-                await ctx.channel.send(R)
-        else:
-            #non mettere la virgola prima di totale perché c'è già nell'output
-            if len(S)==1:
-                S=S[0]
-            await ctx.channel.send(f'{funny} {R} `->` {S}')
+        await ctx.channel.send(f'{funny} {R} `->` {S}')
 
-    except:
-        await ctx.channel.send("Type error")
+    except Exception as e:
+        await ctx.reply(e, mention_author=False)
 
-@commands.command()
+@commands.command(aliases=('100',))
 async def cento(ctx):
     """Command to roll only 1d100"""
     from random import randint
-    await ctx.channel.send(f"{ctx.message.author.global_name}'s d100: `[{randint(1,100)}]`")
+    result = randint(1,100)
+    match result:
+        case 0:
+            result = ':zero:'
+        case 100:
+            result = ':100:'
+        case _ :
+            result = f'`[{result}]`'
+    await ctx.channel.send(f"{ctx.message.author.global_name}'s d100: {result}")
 
 @commands.command()
 async def coin(ctx):
     """Command to toss a coin"""
-
     c = DB.coin()
     if c == 'in piedi':
         await ctx.channel.send(f"Ohibò! La moneta di {ctx.message.author.global_name} dev'essere truccata... si è fermata `{c}`")
@@ -40,23 +41,15 @@ async def coin(ctx):
     
     await ctx.channel.send(f"{ctx.message.author.global_name}, è uscito `{c}`")
 
-@commands.command()
+@commands.command(aliases=('svantaggio',))
 async def dis(ctx, *arg):
     """Command to resolve disavantage rolls"""
-
     try:
         R,S,funny = DB.van_svg(list(arg),"dis",ctx.message.author.global_name)
-    
-        if not S:
-                await ctx.channel.send(R)
-        else:
-            #non mettere la virgola prima di totale perché c'è già nell'output
-            if len(S) == 1:
-                S = S[0]
-            await ctx.channel.send(f'{funny} {R} `->` {S}')
+        await ctx.channel.send(f'{funny} {R} `->` {S}')
 
-    except:
-        await ctx.channel.send("Type error")  
+    except Exception as e:
+        await ctx.reply(e, mention_author=False)
 
 @commands.command()
 async def elvenchad(ctx,*arg):
@@ -64,52 +57,35 @@ async def elvenchad(ctx,*arg):
     A=['2d20']+list(arg)
     try:
         R,extra,remake,elven_acc=DB.elvenacc(A)
-        if not extra:
-            await ctx.channel.send(R)
-
         #If there is a 20, sends the giga-chad gif
         if 20 in remake:
             await ctx.channel.send('https://tenor.com/view/giga-chad-gif-23143840')
 
-        await ctx.channel.send(f"{ctx.message.author.global_name}'s elven accuracy: `{R}` + `{extra}` = `{remake}`,\t `->` {elven_acc}")
-            
-    except:
-        await ctx.channel.send("Type error")
+        await ctx.channel.send(f"{ctx.message.author.global_name}'s elven accuracy: `{R}` + `{extra}` = `{remake}`,\t `->` {elven_acc}")     
+    except Exception as e:
+        await ctx.reply(e, mention_author=False)
 
 @commands.command()
 async def explode(ctx,*arg):
     """Command to roll explosive dice"""
-
     try:
         R,S = DB.explosive_dice(list(arg))
+        await ctx.channel.send(f"{ctx.message.author.global_name}'s explosion: {R} `->` {S} :boom:")
 
-        if not S:
-            await ctx.channel.send(R)
-        else:
-            if len(S) == 1:
-                S = S[0]
-            await ctx.channel.send(f"{ctx.message.author.global_name}'s explosion: {R} `->` {S}")
-
-    except:
-        await ctx.channel.send("Type error")
+    except Exception as e:
+        await ctx.reply(e, mention_author=False)
 
 @commands.command()
 async def forall(ctx,*arg):
     """Command to roll multuple dice and add modifiers to each roll"""
-    
     try:
         R,S = DB.forall(list(arg))
-        if not S:
-            await ctx.channel.send(R)
-        else:
-            if len(S) == 1:
-                S = S[0]
-            await ctx.channel.send(f"{ctx.message.author.global_name}'s forall: {R} `->` {S[1:-1]}")
+        await ctx.channel.send(f"{ctx.message.author.global_name}'s forall: {R} `->` {S[1:-1]}")
 
-    except:
-        await ctx.channel.send("Type error")
+    except Exception as e:
+        await ctx.reply(e, mention_author=False)
 
-@commands.command()
+@commands.command(aliases=('character', 'char', 'player', 'personaggio'))
 async def pg(ctx):
     """Generates a pg (statblock and sizes) according to dnd 5e"""
     
@@ -117,9 +93,6 @@ async def pg(ctx):
     statText = '\n'.join(statBlock)
 
     # selects race, the class and generates sizes
-    with open("variables.json", "r") as f:
-        var = load(f)
-    
     dndClass = choice(var["classes"])
     race = choice(list(var["dimension_table"]))
     height, weight = DB.evaluateSize(var["dimension_table"][race], race)
@@ -129,89 +102,72 @@ async def pg(ctx):
 
     await ctx.channel.send(outputStr)
 
-@commands.command()
+@commands.command(aliases=('razza', 'misure', 'misura'))
 async def race(ctx, *arg):
     """Generates the height and weight of specified race"""
     try:
-        term = ' '.join(arg)
-        with open("variables.json", "r") as f:
-            var = load(f)
-        
+        term = ' '.join(arg)        
         race = [k for k, val in var["race_translator"].items() if term in val].pop()
-            
         height, weight = DB.evaluateSize(var["dimension_table"][race], race)
         await ctx.channel.send(f"{ctx.message.author.global_name}'s {race} sizes: {height} cm and {weight} kg")
-    except:
-        await ctx.channel.send("Type error")
 
-@commands.command()
+    except:
+        await ctx.channel.send("I don't know this race")
+
+@commands.command(aliases=('rng',))
 async def reset(ctx):
     """Command to reset the rng seed"""
     DB.reset_seed()
-    await ctx.channel.send(f"Random number generator seed reset by {ctx.message.author.global_name}")
+    await ctx.channel.send(f"Random number generator seed reset by {ctx.message.author.global_name} :recycle:")
 
 @commands.command()
 async def stats(ctx, *arg):
     """Command to generate stats for dnd 5e"""
-
     try:
         text = ""
         if not arg:
             arg = ('6',)
-        R,serie, dist = DB.stats(int(''.join(arg)))
+        R,serie,dist = DB.stats(int(''.join(arg)))
         for i in range(len(R)):
             text += R[i]
             text = text + ("\t :four_leaf_clover:")*(serie[i] == 18) + ("\t :broken_heart:")*(serie[i] == 3)+"\n"
-        
-        await ctx.channel.send(f"{ctx.message.author.global_name}'s requested statblock\n" + text)
+        message = f"{ctx.message.author.global_name}'s requested statblock\n" +\
+            text + f'Distance from standard serie = {dist}'*(bool(dist))
+        await ctx.channel.send(message)
 
-        if dist:
-            await ctx.channel.send(f'Distance from standard serie = {dist}')
-
-    except:
-        await ctx.channel.send("Type error")
+    except Exception as e:
+        await ctx.reply(e, mention_author=False)
         
 @commands.command()
 async def superstats(ctx):
     """Command to roll 3 set of 6-stats simultaneously"""
-    
     await ctx.channel.send(f"{ctx.message.author.global_name}'s superstats:\n{DB.superstats()}")
 
-@commands.command()
+@commands.command(aliases=('roll',))
 async def tira(ctx, *arg):
     """Standard command to roll dice"""
-
     try:
         R,S = DB.standard_roll(list(arg))
-        if not S:
-            await ctx.channel.send(R)
-        else:
-            #non mettere la virgola prima di totale perché c'è già nell'output
-            if len(S)==1:
-                S=S[0]
-            await ctx.channel.send(f"Tiro di {ctx.message.author.global_name}: {R} `->` {S}")
+        await ctx.channel.send(f"Tiro di {ctx.message.author.global_name}: {R} `->` {S}")
 
-    except:
-        await ctx.channel.send("Type error")
+    except Exception as e:
+        await ctx.reply(e, mention_author=False)
 
-@commands.command()       
+@commands.command(aliases=('venti',))       
 async def tpc(ctx, *arg):
     """Command to roll only 1d20"""
     A = ['1d20']+list(arg)
     try:
         R,S = DB.standard_roll(A)
-        if len(S)==1:
-            S=S[0]
         await ctx.channel.send(f"{ctx.message.author.global_name}'s tpc: {R} `->` {S}")
 
-    except:
-        await ctx.channel.send("Type error")
+    except Exception as e:
+        await ctx.reply(e, mention_author=False)
 
 @commands.command()
 async def ts(ctx, *arg):
     """Command to perform saving throws. The reqired character to properly activate the saving
     throw is '<', since a successful st is greater or equal to DC."""
-
     # looking for the DC
     dcPieces, temp = [], []
     for i in range(len(list(arg))):
@@ -234,18 +190,18 @@ async def ts(ctx, *arg):
     A = ['1d20']+temp
     try:        
         R,S = DB.standard_roll(A)
-        if len(S)==1:
-            S=S[0]
         ans = ''
         if dc:
-            ans = f' over {dc} -> ' + 'Success!'*(S>=dc) + 'Failed'*(S<dc)
+            ans = f' over {dc} = ' + 'Success!'*(S>=dc) + 'Failed'*(S<dc)
         await ctx.channel.send(f"{ctx.message.author.global_name}'s saving throw: {R} {S}{ans}")
-    except:
-        await ctx.channel.send("Type error")
+
+    except Exception as e:
+        await ctx.reply(e, mention_author=False)
+
 
 
 ##### CANTRIP SPELLS #####
-@commands.command()
+@commands.command(aliases=('eldritchblast',))
 async def blast(ctx, *lv):
     """Casts eldritch blast. lv is the player level.
     This eldritch blast comes from dnd 5e as evocation cantrip"""
@@ -254,7 +210,7 @@ async def blast(ctx, *lv):
                                                   level=level,
                                                   spellName='eldritch blast',
                                                   rolled=[randint(1,10) for _ in range(DB._getCantripLevel(level))],
-                                                  dmgType='force'))
+                                                  dmgType='force', emoji=':punch:'))
 
 @commands.command()
 async def chilltouch(ctx, *lv):
@@ -265,7 +221,7 @@ async def chilltouch(ctx, *lv):
                                                   level=level,
                                                   spellName='chill touch',
                                                   rolled=[randint(1,8) for _ in range(DB._getCantripLevel(level))],
-                                                  dmgType='necrotic'))
+                                                  dmgType='necrotic', emoji=':skull:'))
 
 @commands.command()
 async def firebolt(ctx, *lv):
@@ -276,7 +232,7 @@ async def firebolt(ctx, *lv):
                                                   level=level,
                                                   spellName='fire bolt',
                                                   rolled=[randint(1,10) for _ in range(DB._getCantripLevel(level))],
-                                                  dmgType='fire'))
+                                                  dmgType='fire', emoji=':fire:'))
 
 ##### 1ST LEVEL SPELLS #####
 @commands.command()
@@ -288,7 +244,7 @@ async def guidingbolt(ctx, *lv):
                                                   level=level,
                                                   spellName='guiding bolt',
                                                   rolled=[randint(1,6) for _ in range(3+level)],
-                                                  dmgType='fire'))
+                                                  dmgType='fire', emoji=':fire:'))
 
 @commands.command()
 async def wounds(ctx, *lv):
@@ -299,7 +255,7 @@ async def wounds(ctx, *lv):
                                                   level=level,
                                                   spellName='inflict wounds',
                                                   rolled=[randint(1,10) for _ in range(2+level)],
-                                                  dmgType='necrotic'))
+                                                  dmgType='necrotic', emoji=':skull:'))
     
 @commands.command()
 async def sleep(ctx, *lv):
@@ -322,14 +278,26 @@ async def shadowblade(ctx, *lv):
                                                   level=level,
                                                   spellName='shadow blade',
                                                   rolled=[randint(1,8) for _ in range(DB._getShadowBlade(level))],
-                                                  dmgType='psychic'))
+                                                  dmgType='psychic', emoji=':crystal_ball:'))
+
+##### 3RD LEVEL SPELLS #####
+@commands.command()
+async def fireball(ctx, *lv):
+    """Casts fireball. lv is the used spell slot.
+    This inflict wounds comes from dnd 5e as 3rd-level evocation"""
+    level = DB.coerceSlotLevel(lv, 3)
+    await ctx.channel.send(DB._buildSpellSentence(author=ctx.message.author.global_name,
+                                                  level=level,
+                                                  spellName='fireball',
+                                                  rolled=[randint(1,6) for _ in range(5+level)],
+                                                  dmgType='fire', emoji=':fire:'))
 
 
 # This method must be here. It adds the commands to the bot
 async def setup(bot):
     CMD_LIST = (adv, cento, coin, dis, elvenchad, explode, forall, pg, race, reset, stats,
                 superstats, tira, tpc, ts)
-    SPELL_LIST = (blast, chilltouch, firebolt, guidingbolt, wounds, shadowblade, sleep)
+    SPELL_LIST = (blast, chilltouch, firebolt, fireball, guidingbolt, wounds, shadowblade, sleep)
     
     for i in CMD_LIST+SPELL_LIST:
         bot.add_command(i)

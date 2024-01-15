@@ -2,10 +2,6 @@ from random import randint
 from math import floor
 from typing import Any
 
-kill_terms = ("I can roll al least 64 dice simultaneously",
-              "255 is the maximal amplitude of the die",
-              "2 is the minimal amplitude of the die")
-
 
 """Class to manage dice rolls. It is not an object, but only a collection of functions called
 by the bot's commands.
@@ -38,10 +34,11 @@ def string2dice(L:list):
             L[i + 1] = L[i] + L[i + 1]
         else:
             C.append(L[i].lower())
+    C = [i for i in C if 'd' in i]  #removes unused constants
 
-    C = (i for i in C if 'd' in i)  #removes unused constants
+    # if there are no dice, raise an error
     if C == []:
-        return "No dice?"
+        raise TypeError('No dice? :face_with_monocle:')
     
     return C
 
@@ -54,9 +51,7 @@ def buildDice(v:str):
 
     Blanks born by separating +/- are ignored
     """
-
     results, _dice = [], []
-
     plus_item = v.split("+")
     for k in plus_item:
         minus_item = k.split("-")
@@ -73,8 +68,6 @@ def buildDice(v:str):
             else:
                 R,dado = check_roll(z,False)
 
-            if R in kill_terms: # quit if there is an invalid die
-                return R
             # appending the results to a list
             results.append(R)
             _dice.append(dado)
@@ -83,37 +76,37 @@ def buildDice(v:str):
 
 def check_roll(x:str, B:bool):
     """Function that manages the construction of the die to be pulled. Switch B is used for sums"""
+    try:
+        if "d" in x:
+            #instruction for dice
+            x=x.split("d")
+            x[0]=x[0] + "1"*(x[0]=="")
 
-    if "d" in x:
-        #instruction for dice
-        x=x.split("d")
-        x[0]=x[0] + "1"*(x[0]=="")
+            quantity=int(x[0])
+            if quantity>64:
+                #max number of dice rollable at the same moment.
+                #Notice that one can make multiple '64-rolls' and still get 1000 rolls in one command...
+                raise TypeError('I can roll al least 64 dice simultaneously')
 
-        quantity=int(x[0])
-        if quantity>64:
-            #max number of dice rollable at the same moment.
-            #Notice that one can make multiple '64-rolls' and still get 1000 rolls in one command...
-            return kill_terms[0]
+            die_amplitude = int(x[1])
+            if die_amplitude > 256: #max amplitude of dice
+                raise TypeError('255 is the maximal amplitude of the die')
+            if die_amplitude < 2: #min amplitude of dice
+                raise TypeError('2 is the minimal amplitude of the die')
+            
+            ZZ = roll(quantity,die_amplitude,B)
 
-        die_amplitude = int(x[1])
-        if die_amplitude > 256: #max amplitude of dice
-            return kill_terms[1]
-        if die_amplitude < 2: #min amplitude of dice
-            return kill_terms[2]
-        
-        ZZ = roll(quantity,die_amplitude,B)
+        else:   #instruction for modifiers
+            die_amplitude = 0
+            ZZ = 0*(x=="") + (int(x)*(B)+(-int(x))*(not B))*(x!="")
 
-    else:
-        #instruction for modifiers
-        die_amplitude = 0
-        ZZ = 0*(x=="") + (int(x)*(B)+(-int(x))*(not B))*(x!="")
-
-    return ZZ, die_amplitude
+        return ZZ, die_amplitude
+    except ValueError:
+        raise TypeError('Type error')
 
 def erase_parethesis(listData:list, key:str):
-    """Function to edit the list of rolled dice to show in discord chat.\n
+    """Function to edit the list of rolled dice to show in discord chat.
     It changes a 'list of list' in a single list of data. It adds the mono-format."""
-
     text = " "
     for i in range(len(listData)):
         text += f"`{listData[i]}`" #char `` used to have mono-type format
@@ -121,13 +114,12 @@ def erase_parethesis(listData:list, key:str):
             pass
         else:
             text += ", "
-    return text
+    return text[:-2]
 
 
 ##### DICE ROLLS FUNCTIONS #####
 def coin() -> str:
     """Function that tosses a simple coin. It has a chance of 1/257 to return a tie"""
-
     coinValue = randint(1,257)
     if coinValue in range(1,129):
         return 'Testa'
@@ -139,29 +131,20 @@ def coin() -> str:
 def elvenacc(L:list):
     """Function that manages Elven Accuracy feat of D&D 5e. Rolls 2d20 and reroll the lowest. 
     Then chooses the highest."""
-
     G = string2dice(L)
-    if isinstance(G, str):
-        return G, None, None, None
 
     rolledDice = None
-
     for item in G:
         tempResults, _ = buildDice(item)
-        if isinstance(tempResults, str):
-            return tempResults, None, None, None
-
         to_add = 0
         for i in tempResults:
             if isinstance(i, list):
                 rolledDice = i
                 continue
-            
             to_add += i
     
     P = randint(1,20)       #extra d20
     finalResults = rolledDice*(P < min(rolledDice)) + [max(rolledDice),P]*(P >= min(rolledDice))
-
     return rolledDice, P, finalResults, max(finalResults)+to_add
 
 def evaluateSize(L:list, race:str):
@@ -184,13 +167,9 @@ def explosive_dice(L:list):
     """Function that rolls explosive dice (used in Savage World system).
     It pulls a die and if the result is the maximal amplitude of it, it pulls another one, 
     recursively."""
-
     G = string2dice(L)
-    if isinstance(G, str):
-        return G, None
-
+    
     finalResults, sums = [], []
-
     for item in G:
         tempResults, die = buildDice(item)
         if isinstance(tempResults, str):
@@ -205,32 +184,23 @@ def explosive_dice(L:list):
                 continue
             
             localTotal += i
-            
         sums.append(localTotal)
 
     finalResults=erase_parethesis(finalResults,'')
-
-    return finalResults,sums
+    return finalResults,hasLengthOne(sums)
 
 def forall(L:list):
     """Function that rolls n dice and add modifiers to ALL results without sum them together"""
-
     G = string2dice(L)
-    if isinstance(G, str):
-        return G, None
     
     #a questo punto hai una lista di stringhe compatte
     rolledResults, moddedResults = [], []
-
     for item in G:
         tempResults, _ = buildDice(item)
-        if isinstance(tempResults, str):
-            return tempResults, None
 
         #preparing the output item
         to_add = 0
         rolledResults.append(tempResults[0])
-
         for i in range(1,len(tempResults)):
             if isinstance(tempResults[i], list):
                 rolledResults.append(tempResults[i])
@@ -238,11 +208,10 @@ def forall(L:list):
                 continue
             
             to_add += tempResults[i]
-
         moddedResults.append([k+to_add for k in tempResults[0]])
 
     rolledResults = erase_parethesis(rolledResults,'')
-    return rolledResults,str(moddedResults)
+    return rolledResults,str(hasLengthOne(moddedResults))
 
 def reset_seed():
     """Function that reset the rng seed"""
@@ -258,18 +227,11 @@ def roll(how_many:int, amplitude:int, B:bool) -> list:
 
 def standard_roll(L:list):
     """Function that elaborates standard dice rolls"""
-
     G = string2dice(L)
-    if isinstance(G, str):
-        return G, None
 
-    finalResults, S = [], []
-
+    finalResults, sums = [], []
     for item in G:
         tempResults, _ = buildDice(item)
-        if isinstance(tempResults, str):
-            return tempResults, None
-
         '''!tira 5d6+1d4 2d10 --> item 0 --> XX=[[1, 5, 2, 2, 6], [3]]
                                     item 1 --> XX=[[1, 7]]'''
         #preparing the output item
@@ -279,17 +241,14 @@ def standard_roll(L:list):
                 finalResults.append(i)
                 total += sum(i)
                 continue
-            
             total += i
-
-        S.append(total)
+        sums.append(total)
 
     #Editing parenthesis in output
     finalResults = erase_parethesis(finalResults,'')
+    return finalResults,hasLengthOne(sums)  
 
-    return finalResults,S  
-
-def stats(amount:int):
+def stats(amount:int) -> tuple[list, list, int]:
     """Function that generates up to 6 stats for D&D 5e. It rolls 4d6 and sums the three highest.\n
     Automatically convert the requested quantity in
         - a 6 if amount is above 6 or below -6
@@ -333,17 +292,11 @@ def superstats() -> str:
 def van_svg(L:list, term:str, name:str):
     """Function that manages advantage/disavantage rolls for D&D.\n
     It's a copy of standard_roll, but the final sum contains only the max/min"""
-
     G = string2dice(L)
-    if isinstance(G, str):
-        return G, None, None
 
     finalResults, singleSums, dice = [], [], []
-
     for item in G:
         tempResults, die = buildDice(item)
-        if isinstance(tempResults, str):
-            return tempResults, None, None
 
         #preparing the output item
         total = 0
@@ -355,9 +308,7 @@ def van_svg(L:list, term:str, name:str):
                 elif term == "dis":
                     total += min(i)
                 continue
-            
             total += i
-
         singleSums.append(total)
         dice += die
     
@@ -380,11 +331,16 @@ def van_svg(L:list, term:str, name:str):
             break
             
     finalResults = erase_parethesis(finalResults,'')
-
-    return finalResults, singleSums, ans
+    return finalResults, hasLengthOne(singleSums), ans
 
 
 ##### AUXILIARY METHODS #####
+def hasLengthOne(array:list) -> list:
+    """Returns array[0] if its lenght is 1"""
+    if len(array) == 1:
+        return array[0]
+    return array
+
 def _getModifier(numberList: list[int]) -> str:
     """Function that writes the sign of a number string"""
     modifier = floor((sum(numberList)-10)/2)
@@ -399,12 +355,12 @@ def _getShadowBlade(level: int) -> int:
     used slot level"""
     return 2 + (level >= 3) + (level >= 5) + (level >= 7)
 
-def _buildSpellSentence(author:str, level:int, spellName:str, rolled:list[int], dmgType: str) -> str:
+def _buildSpellSentence(author:str, level:int, spellName:str, rolled:list[int], dmgType:str, emoji:str='') -> str:
     """Returns the output string of spell casting"""
     if spellName != 'sleep':
         dmgType += ' damage'
 
-    return f"{author}'s level {level} {spellName}: `{rolled} -> {sum(rolled)} {dmgType}`"
+    return f"{author}'s level {level} {spellName}: `{rolled} -> {sum(rolled)} {dmgType}` {emoji}"
 
 def _whileExplosion(L:int, amp:int) -> list[int]:
     """Auxiliary function to roll explosive dice"""
@@ -429,7 +385,6 @@ def coerceSlotLevel(level:Any, base: int) -> int:
 
 def coercePlayerLevel(level:Any) -> int:
     """Coerces the level of the spell to the base value or castes it to int"""
-    print(level, type(level))
     try:
         coerced = int(''.join(level))
         if coerced >= 20:
