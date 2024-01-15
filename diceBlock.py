@@ -1,7 +1,7 @@
 from random import randint
+from json import load
 from math import floor
 from typing import Any
-
 
 """Class to manage dice rolls. It is not an object, but only a collection of functions called
 by the bot's commands.
@@ -10,6 +10,8 @@ There are two separate set of functions:
 - Type-processing functions -> used to parse input strings and edit the output
 - Dice rolls functions -> used to roll dice (in many ways)
 """
+
+VARIABLES = load(open("variables.json", "r"))
 
 ##### TYPE-PROCESSING FUNCTIONS #####
 def string2dice(L:list):
@@ -335,17 +337,23 @@ def van_svg(L:list, term:str, name:str):
 
 
 ##### AUXILIARY METHODS #####
-def hasLengthOne(array:list) -> list:
-    """Returns array[0] if its lenght is 1"""
-    if len(array) == 1:
-        return array[0]
-    return array
+def _buildSpellSentence(author:str, level:int, spellName:str, rolled:list[int], dmgType:str, emoji:str='') -> str:
+    """Returns the output string of spell casting"""
+    if spellName != 'sleep':
+        dmgType += ' damage'
+
+    return f"{author}'s level {level} {spellName}: `{rolled} -> {sum(rolled)} {dmgType}` {emoji}"    
 
 def _getModifier(numberList: list[int]) -> str:
     """Function that writes the sign of a number string"""
     modifier = floor((sum(numberList)-10)/2)
     return '+'*(modifier > 0) + str(modifier)
 
+def _getAP(job:str, level:int) -> int:
+    """Returns the extra ability scores that the player has to add to the stats"""
+    return 2*(level>=4) + 2*(level>=8) + 2*(level>=12) + 2*(level>=16) + 2*(level>=19) \
+    + 2*(level>=10 and job=='rogue') + 2*(level>=6 and job=='fighter') + 2*(level>=14 and job=='fighter')
+    
 def _getCantripLevel(level: int) -> int:
     """Returns the number of dice to be rolled for a cantrip according to the pg level"""
     return 1 + (level >= 5) + (level >= 11) + (level >= 17)
@@ -355,12 +363,19 @@ def _getShadowBlade(level: int) -> int:
     used slot level"""
     return 2 + (level >= 3) + (level >= 5) + (level >= 7)
 
-def _buildSpellSentence(author:str, level:int, spellName:str, rolled:list[int], dmgType:str, emoji:str='') -> str:
-    """Returns the output string of spell casting"""
-    if spellName != 'sleep':
-        dmgType += ' damage'
+def _isFloat(string:str) -> bool:
+    """Returns True if the input string is of type float"""
+    if string.replace(".", "").isnumeric() or string.replace(",",'').isnumeric():
+        return True
+    return False
 
-    return f"{author}'s level {level} {spellName}: `{rolled} -> {sum(rolled)} {dmgType}` {emoji}"
+def _isClass(word:str) -> bool:
+    """Returns true if word is a class"""
+    return word in set(i for lst in VARIABLES["classes"] for i in lst)
+
+def _isRace(word:str) -> bool:
+    """Returns true if word is a race"""
+    return word in set(i for lst in VARIABLES["races"] for i in lst)
 
 def _whileExplosion(L:int, amp:int) -> list[int]:
     """Auxiliary function to roll explosive dice"""
@@ -386,7 +401,7 @@ def coerceSlotLevel(level:Any, base: int) -> int:
 def coercePlayerLevel(level:Any) -> int:
     """Coerces the level of the spell to the base value or castes it to int"""
     try:
-        coerced = int(''.join(level))
+        coerced = int(level)
         if coerced >= 20:
             coerced = 20
         elif coerced < 1:
@@ -395,3 +410,58 @@ def coercePlayerLevel(level:Any) -> int:
         coerced = 1
 
     return coerced
+
+def hasLengthOne(array:list) -> list:
+    """Returns array[0] if its lenght is 1"""
+    if len(array) == 1:
+        return array[0]
+    return array
+
+def parseKwargs(parameters:list[str]) -> list[str]:
+    """Parses the input of the command !pg and returns the parameters
+    ready to be used in other functions. Parameters is a list of fake kwargs, because
+    every item in parameter must be a string in 'name=value' format\n
+    Accepted keys are: lv, race, class, subclass."""
+
+    newParams = {"level":None, "race":None, "class":None}
+    for p in parameters:
+        p = p.replace(' ', '')
+        pSplit = p.split('=')
+
+        # parse level
+        print(_isFloat(pSplit[0]))
+        if _isFloat(pSplit[0]):
+            newParams["level"] = coercePlayerLevel(str2float(pSplit[0]))
+        elif pSplit[0] in ('lv', 'level', 'livello'):
+            newParams["level"] = coercePlayerLevel(str2float(pSplit[1]))
+
+        # parse primary race
+        elif _isRace(pSplit[0]):
+            newParams["race"] = translateRace(pSplit[0])
+        elif pSplit[0] in ('race', 'razza'):
+            newParams["race"] = translateRace(pSplit[1])
+
+        # parse class
+        elif _isClass(pSplit[0]):
+            newParams["class"] = translateClass(pSplit[0])
+        elif pSplit[0] in ('class', 'classe'):
+            newParams["class"] = translateClass(pSplit[1])
+
+    return newParams
+
+def str2float(string:str) -> float:
+    """Converts the string to a float, assuming that it is a numeric value"""
+    if '.' in string:
+        return float(string)
+    elif ',' in string:
+        return float(string[:string.index(',')])
+    
+    return float(string)
+
+def translateClass(job:str) -> str:
+    """Translates the class using the translator saved int the .json"""
+    return [k for k, val in VARIABLES["classes"].items() if job in val].pop()
+
+def translateRace(race:str) -> str:
+    """Translates the race using the translator saved in the .json"""
+    return [k for k, val in VARIABLES["races"].items() if race in val].pop()

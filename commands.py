@@ -3,8 +3,7 @@ from random import randint
 from json import load
 from random import choice
 import diceBlock as DB
-
-var = load(open("variables.json", "r"))
+from diceBlock import VARIABLES as var
 
 ##### ROLLS COMMANDS #####
 @commands.command(aliases=('vantaggio',))
@@ -85,20 +84,35 @@ async def forall(ctx,*arg):
     except Exception as e:
         await ctx.reply(e, mention_author=False)
 
-@commands.command(aliases=('character', 'char', 'player', 'personaggio'))
-async def pg(ctx):
+@commands.command(aliases=('character', 'char', 'player', 'personaggio', 'npc'))
+async def pg(ctx, *arg):
     """Generates a pg (statblock and sizes) according to dnd 5e"""
-    
-    statBlock, _, distance = DB.stats(6)  # generates the statblock in standard format
+    statBlock, statList, distance = DB.stats(6)  # generates the statblock in standard format
     statText = '\n'.join(statBlock)
+    parameters = DB.parseKwargs(set(arg))
+    
+    # Generate the race
+    dndRace = parameters["race"]
+    if not dndRace:
+        dndRace = choice(list(var["dimension_table"]))
+    height, weight = DB.evaluateSize(var["dimension_table"][dndRace], dndRace)
 
-    # selects race, the class and generates sizes
-    dndClass = choice(var["classes"])
-    race = choice(list(var["dimension_table"]))
-    height, weight = DB.evaluateSize(var["dimension_table"][race], race)
+    # Generate the class
+    dndClass = parameters["class"]
+    if not dndClass:
+        dndClass = choice(list(var["classes"]))
+        
+    # Get the level
+    dndLevel = parameters["level"]
+    if not dndLevel:
+        dndLevel = 1
+    ap = DB._getAP(dndClass, dndLevel)
 
-    outputStr = f"{ctx.message.author.global_name}'s random character:\nLv 1\t{dndClass}\t{race} " +\
-        f"({height} cm and {weight} kg)\n{statText}\nDistance from standard serie = {distance}"
+    # Build the output
+    outputStr = f"{ctx.message.author.global_name}'s random character:\n" +\
+        f"Lv {dndLevel}\t{dndClass}\t{dndRace} ({height} cm and {weight} kg)\n" +\
+        f"{statText}\nThe distance from standard serie is {distance}, and " +\
+        f"you have **{ap} extra ability score** to use"
 
     await ctx.channel.send(outputStr)
 
@@ -107,7 +121,7 @@ async def race(ctx, *arg):
     """Generates the height and weight of specified race"""
     try:
         term = ' '.join(arg)        
-        race = [k for k, val in var["race_translator"].items() if term in val].pop()
+        race = DB._translateRace(term)
         height, weight = DB.evaluateSize(var["dimension_table"][race], race)
         await ctx.channel.send(f"{ctx.message.author.global_name}'s {race} sizes: {height} cm and {weight} kg")
 

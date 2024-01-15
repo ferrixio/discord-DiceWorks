@@ -103,7 +103,7 @@
         "tiefling":[142.5,55,8,4]
     },
 
-    "race_translator":{
+    "races":{
         "human": ["human", "umano"],
         "elf": ["elf", "elfo alto", "high elf"],
         "drow": ["drow", "elfo scuro"],
@@ -118,7 +118,21 @@
         "tiefling": ["tiefling"]
     },
 
-    "classes":["artificier", "barbarian", "bard", "cleric", "druid", "fighter", "monk", "paladin", "ranger", "rogue", "sorcerer", "warlock", "wizard"],
+    "classes":{
+        "artificier": ["artificier", "artificiere"],
+        "barbarian": ["barbarian", "barbaro"],
+        "bard": ["bard", "bardo"],
+        "cleric": ["cleric", "chierico"],
+        "druid": ["druid", "druido"],
+        "fighter": ["fighter", "guerriero"],
+        "monk": ["monk", "monaco"],
+        "paladin": ["paladin", "paladino"], 
+        "ranger": ["ranger"],
+        "rogue": ["rogue", "ladro"],
+        "sorcerer": ["sorcerer", "stregone"],
+        "warlock": ["warlock"],
+        "wizard": ["wizard", "mago"]
+    },
 
     "spell_list":{
         "cantrip":["blast (eldritch blast)", "chilltouch", "firebolt"],

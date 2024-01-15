@@ -10,7 +10,8 @@ Legend:
 + Added aliases to many commands!!!
 + Added `fireball` spell
 + Added emojis at the end of some spell sentences
-* Improved the logich behind the answers
++ Added filters in `!pg` 
+* Improved the logic behind the answers
 * Improved the error handling. Now they reply the user
 ^ Moved the spell list in variables.json
 
