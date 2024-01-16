@@ -3,7 +3,7 @@
 
 :dragon: Author: Samuele Ferri (@ferrixio, ferri#9207)
 
-:star: Version 3.6.0
+:star: Version 4.0.0
 
 ## Requirements
 
@@ -36,5 +36,3 @@ Main feature of the bot is roll dice in the following way:
 `!tira 1d20+3 2d10-1` -> `Tiro di ferrixio:  [1], [3, 3],  totale: [4, 5]`
 
 Moreover you can invoke commands again by reply to it with the command `!redo`.
-
-The bot is also responsible to send a welcome message and count members in [OtakusHouse server](https://discord.gg/9e4HPeWhbf).

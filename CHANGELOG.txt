@@ -6,11 +6,12 @@ Legend:
 * = bug fixing
 ^ = miscellaneous
 
-## Version 3.6.1
+## Version 4.0.0
 + Added aliases to many commands!!!
 + Added `fireball` spell
 + Added emojis at the end of some spell sentences
 + Added filters in `!pg` 
+- Removed the Otakus House management
 * Improved the logic behind the answers
 * Improved the error handling. Now they reply the user
 ^ Moved the spell list in variables.json

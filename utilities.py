@@ -9,8 +9,6 @@ ACQUA=0x1ABC9C      #Color verde-acqua
 load_dotenv()
 BOT = getenv('BOT')
 CHAT_T = getenv('chat_in_test')
-CHAT_O = getenv('chat_in_OH')
-OT_GUILD = getenv('OTAKUS_GIULD')
 TEST = getenv('TEST_GIULD')
 DANIEL = getenv('DANIEL')
 FERRI = getenv('FERRI')
@@ -22,7 +20,6 @@ CENTO = getenv('CENTO')
 nomi=(FERRI,CENTO,OMAR,LAPO,VISCO,DANIEL)
 with open("variables.json", "r") as f:
     var = load(f)
-    set_mess = var["welcome_messages"]
     copyright = "©"+var["copyright"]
     help_desc = var["help_description"]
     help_short = var["help_short"]
@@ -132,10 +129,3 @@ class ServerUtilities:
                 'Visco-sensei, mi ha chiamato?'*(str(user_id)==VISCO)+\
                 'Daniel nya! Swono al tuwo sewizio UwU'*(str(user_id)==DANIEL)+\
                 (username+", sarò l'incarnazione della tua fortuna. !help per sapere quali sono i miei servizi.")*(str(user_id) not in nomi)
-
-
-    ### WELCOME FUNCTIONS ###
-
-    def welcome() -> str:
-        """Random welcome message for OtakusHouse"""
-        return choice(set_mess)

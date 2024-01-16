@@ -26,17 +26,6 @@ async def on_ready():
     await owner.send(f"The bot has successfully connected to Discord in {round(time()-start, 3)} seconds")
 
 @bot.event
-async def on_member_join(member):
-    """Handling welcome message for Otaku's House"""
-    sentence = ServerUtilities.welcome().format(member.mention)
-
-    if member.guild.id == int(getenv('OTAKUS_GUILD')):
-        await bot.get_channel(int(getenv('chat_in_OH'))).send(sentence)
-    
-    elif member.guild.id == int(getenv('TEST_GUILD')): 
-        await bot.get_channel(int(getenv('chat_in_test'))).send(sentence)
-
-@bot.event
 async def on_message(ctx):
     """Function to handle some events during chitchat"""
     if ctx.author.id==int(getenv('BOT')):
@@ -45,13 +34,6 @@ async def on_message(ctx):
     if "master" in ctx.content or "Master" in ctx.content:
         response=ServerUtilities.master(ctx.author.global_name,ctx.author.id)
         await ctx.channel.send(response)
-
-    # old easter-eggs
-    # elif "fate" in ctx.content:
-    #     await ctx.channel.send(f'Le fate sono sempre dalla tua parte, {ctx.author.global_name} :smirk:')
-
-    # elif "soap" in ctx.content:
-    #     await ctx.channel.send("Sto piangendo dalla gioia! È stato davvero eccezionale, bellissimo, MERAVIGLIOSO!!! :cry:")
 
     #needs to make the bot realise that other commands may arrive
     await bot.process_commands(ctx)
