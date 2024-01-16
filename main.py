@@ -52,10 +52,14 @@ async def on_command_error(ctx, error):
 @bot.group(invoke_without_permission=True)
 async def help(ctx,*arg):
     """Custom help command with Embed. Also it sends a memo to the owner"""
-    em = ServerUtilities.custom_help(arg, bot.user.name)
-    await ctx.channel.send(embed=em)
-    if ctx.author.id == int(getenv('FERRI')):
-        await ctx.author.send('Ricordati che hai anche il gruppo ferri guilds/upgrade/send')
+    try:
+        em, fP = ServerUtilities.custom_help(arg, bot.user.name)
+        if fP:
+            await ctx.author.send(embed=em)
+        else:
+            await ctx.channel.send(embed=em)
+    except Exception as e:
+        await ctx.reply(e, mention_author=False)
 
 @bot.command(aliases=('membri', 'members'))
 async def member(ctx):

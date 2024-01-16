@@ -13,11 +13,11 @@
         "coin":"Tosses a coin; no input required. It has a 1/256 chance to give a tie.",
         "dis":"Rolls dice and chooses the lowest. The syntax is **!dis nds+c**, where n=number of dice, s=amplitude of dice, c=list of modifiers. Can make multiple rolls separating dice with a blank space.",
         "elvenchad":"Rolls 2d20 (with also modifiers), rerolls the least and chooses the highest. The syntax is **!elvenchad k**, where k=list of modifiers.",
+        "explode":"Rolls input dice and explode the result; it can sum modifiers. The syntax is **!lc dk+mods**, where k=dice and mods is a list of modifiers.",
         "forall":"Rolls some dice and add modifiers to each result. The syntax is the same as !tira.",
         "help":"You are very mad if you've asked me this... why?",
-        "lc":"Rolls input dice and explode the result; it can sum modifiers. The syntax is **!lc dk+mods**, where k=dice and mods is a list of modifiers.",
         "member":"Sends as DM the number of member of this server; it doesn't count bots. Works only for admins.",
-        "pg":"Creates a lv 1 random character, selecting the race, the class, the sizes and generating its statblock.",
+        "pg":"Creates a random character, selecting the race, the class, the sizes and its statblock.",
         "ping":"Shows the current bot latency.",
         "race":"Generates race height and weight according to d&d 5e table. The syntax is **!race name**, where name is the race you have (in italian or english)",
         "redo":"Repeat any command. You can activate it by replying to it and writing !redo.",
@@ -28,6 +28,19 @@
         "tira":"Rolls multiple dice (with also modifiers). The syntax is **!tira nds+c**, where n=number of dice, s=type of dice (among 2 and 256) and c=modifiers.\nIf the user puts a +/- beetween dice it will sum the results, if it's a blank space it will return separated results. Isolated numbers will be ignored.",
         "tpc":"Rolls 1d20 and sums modifiers. The syntax is **!tpc x**, where x=modifiers (you must specify the sign).",
         "ts":"Make a saving throw. The syntax is **!ts x <y**, where x=modifiers as in !tpc and y=dc of the saving throw."
+    },
+
+    "aliases":{
+        "adv":["vantaggio"],
+        "cento":["100"],
+        "dis":["svantaggio"],
+        "member":["membri", "members"],
+        "pg":["character", "char"],
+        "race":["razza", "misure", "misura"],
+        "redo":["ripeti", "again", "repeat"],
+        "spell":["spells"],
+        "tira":["roll"],
+        "tpc":["venti"]
     },
 
     "dimension_table":{

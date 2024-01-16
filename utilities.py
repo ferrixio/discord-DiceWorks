@@ -1,8 +1,7 @@
 from os import getenv
-from random import choice
-from dotenv import load_dotenv 
-from json import load
+from dotenv import load_dotenv
 from discord import Embed
+from diceBlock import VARIABLES as var
 
 ACQUA=0x1ABC9C      #Color verde-acqua
 
@@ -18,14 +17,13 @@ VISCO = getenv('VISCO')
 CENTO = getenv('CENTO')
 
 nomi=(FERRI,CENTO,OMAR,LAPO,VISCO,DANIEL)
-with open("variables.json", "r") as f:
-    var = load(f)
-    copyright = "©"+var["copyright"]
-    help_desc = var["help_description"]
-    help_short = var["help_short"]
-    help_spell = var["help_spell"]
-    dic_local_help = var["dic_local_help"]
-    dic_spell_list = var["spell_list"]
+copyright = "©"+var["copyright"]
+help_desc = var["help_description"]
+help_short = var["help_short"]
+help_spell = var["help_spell"]
+dic_local_help = var["dic_local_help"]
+dic_spell_list = var["spell_list"]
+aliases = var["aliases"]
 
 dic_global_help={
         "standard":
@@ -67,9 +65,9 @@ class ServerUtilities:
     """
 
     ### CUSTOM EMBEDDED MESSAGES ###
-
-    def custom_help(terms:tuple, name:str):
+    def custom_help(terms:tuple, name:str) -> tuple[Embed, bool]:
         """Custom help function build using embed from discord"""
+        fullPresence = False
         if terms == ():
             em = Embed(title=f":notebook_with_decorative_cover: {name}'s command list", colour=ACQUA, description=help_desc)
             em.add_field(name="Standard tools", value=dic_global_help["standard"], inline=False)
@@ -78,19 +76,29 @@ class ServerUtilities:
             em.add_field(name="Miscellaneous", value=dic_global_help["miscellaneous"])
     
         elif "full" in terms or "all" in terms:
+            fullPresence = True
             em = Embed(title=f"{name}'s full command list", colour=ACQUA, description="Sorted in alphabetic order")
             for i in dic_local_help:
-                em.add_field(name=i, value=dic_local_help[i], inline=False)
+                try:
+                    als = f" (aliases: {', '.join(aliases[i])})"
+                except:
+                    als = ''
+                em.add_field(name=i+als, value=dic_local_help[i], inline=False)
 
         else:
             em = Embed(colour=ACQUA)
             for i in terms:
                 if i in dic_local_help:
-                    em.add_field(name=i, value=dic_local_help[i], inline=False)
+                    try:
+                        als = f" (aliases: {', '.join(aliases[i])})"
+                    except:
+                        als = ''
+                    em.add_field(name=i+als, value=dic_local_help[i], inline=False)
 
         em.set_footer(text=copyright)
-        if em.fields:
-            return em
+        if not em.fields:
+            raise TypeError('Command not found')
+        return em, fullPresence
     
     def spellList():
         """Returns the embedded message of the spell list"""
@@ -104,7 +112,6 @@ class ServerUtilities:
         return em    
     
     ### SPECIAL MESSAGE FUNCTIONS ###
-
     def _getChangelog(name:str, text:str = '') -> Embed:
         """Function that returns an embed version of the changelog"""
         em = Embed(title=f"What's new in {name}?", colour=ACQUA, description=help_short)

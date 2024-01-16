@@ -84,7 +84,7 @@ async def forall(ctx,*arg):
     except Exception as e:
         await ctx.reply(e, mention_author=False)
 
-@commands.command(aliases=('character', 'char', 'player', 'personaggio', 'npc'))
+@commands.command(aliases=('character', 'char'))
 async def pg(ctx, *arg):
     """Generates a pg (statblock and sizes) according to dnd 5e"""
     statBlock, statList, distance = DB.stats(6)  # generates the statblock in standard format
@@ -128,7 +128,7 @@ async def race(ctx, *arg):
     except:
         await ctx.channel.send("I don't know this race")
 
-@commands.command(aliases=('rng',))
+@commands.command()
 async def reset(ctx):
     """Command to reset the rng seed"""
     DB.reset_seed()
