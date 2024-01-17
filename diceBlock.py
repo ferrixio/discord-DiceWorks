@@ -388,7 +388,7 @@ def _whileExplosion(L:int, amp:int) -> list[int]:
 def coerceSlotLevel(level:Any, base: int) -> int:
     """Coerces the level of the spell to the base value or castes it to int"""
     try:
-        coerced = int(''.join(level))
+        coerced = int(str2float(''.join(level)))
         if coerced >= 9:
             coerced = 9
         elif coerced < base:
@@ -401,7 +401,7 @@ def coerceSlotLevel(level:Any, base: int) -> int:
 def coercePlayerLevel(level:Any) -> int:
     """Coerces the level of the spell to the base value or castes it to int"""
     try:
-        coerced = int(level)
+        coerced = int(str2float(''.join(level)))
         if coerced >= 20:
             coerced = 20
         elif coerced < 1:
@@ -431,9 +431,9 @@ def parseKwargs(parameters:list[str]) -> list[str]:
         # parse level
         print(_isFloat(pSplit[0]))
         if _isFloat(pSplit[0]):
-            newParams["level"] = coercePlayerLevel(str2float(pSplit[0]))
+            newParams["level"] = coercePlayerLevel(pSplit[0])
         elif pSplit[0] in ('lv', 'level', 'livello'):
-            newParams["level"] = coercePlayerLevel(str2float(pSplit[1]))
+            newParams["level"] = coercePlayerLevel(pSplit[1])
 
         # parse primary race
         elif _isRace(pSplit[0]):

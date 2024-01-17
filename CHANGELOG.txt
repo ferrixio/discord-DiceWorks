@@ -6,6 +6,11 @@ Legend:
 * = bug fixing
 ^ = miscellaneous
 
+## Version 4.0.1
+* Fixed type errors in variables -> spell
+* Fixed the bug of the float level for spells
+^ Improved help messages
+
 ## Version 4.0
 + Added aliases to many commands!!!
 + Added `fireball` spell

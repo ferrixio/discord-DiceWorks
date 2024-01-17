@@ -64,7 +64,7 @@ async def elvenchad(ctx,*arg):
     except Exception as e:
         await ctx.reply(e, mention_author=False)
 
-@commands.command()
+@commands.command(aliases=('lc',))
 async def explode(ctx,*arg):
     """Command to roll explosive dice"""
     try:

@@ -1,19 +1,19 @@
 {
-    "copyright":"Samuele Ferri 2024\t\t\t\t Bot version: 4.0.0",
+    "copyright":"Samuele Ferri 2024\t\t\t\t Bot version: 4.0.1",
 
     "help_description": "Type !help [command] for more info on a specific command; works also with a list of commands separated by a blank space.",
 
     "help_short": "Type !help to get the list of available commands.", 
 
-    "help_spell": "To automatically increment the dice to roll you can specity the **character level** for cantrips or the **used spell slot** for normal spells.",
+    "help_spell": "To automatically increment the dice to roll, add a number in the message (the **character level** for cantrips and the **used spell slot** for normal spells).",
 
     "dic_local_help":{
-        "adv":"Rolls dice and chooses the highest. The syntax is **!adv nds+c**, where n=number of dice, s=amplitude of dice, c=list of modifiers. Can make multiple rolls separating dice with a blank space.",
+        "adv":"Rolls dice and chooses the highest.\nThe syntax is **!adv nds+c**, where n=number of dice, s=amplitude of dice, c=list of modifiers. Can make multiple rolls separating dice with a blank space.",
         "cento":"Rolls a single d100; no input required.",
         "coin":"Tosses a coin; no input required. It has a 1/256 chance to give a tie.",
-        "dis":"Rolls dice and chooses the lowest. The syntax is **!dis nds+c**, where n=number of dice, s=amplitude of dice, c=list of modifiers. Can make multiple rolls separating dice with a blank space.",
-        "elvenchad":"Rolls 2d20 (with also modifiers), rerolls the least and chooses the highest. The syntax is **!elvenchad k**, where k=list of modifiers.",
-        "explode":"Rolls input dice and explode the result; it can sum modifiers. The syntax is **!lc dk+mods**, where k=dice and mods is a list of modifiers.",
+        "dis":"Rolls dice and chooses the lowest.\nThe syntax is **!dis nds+c**, where n=number of dice, s=amplitude of dice, c=list of modifiers. Can make multiple rolls separating dice with a blank space.",
+        "elvenchad":"Rolls 2d20 (with also modifiers), rerolls the least and chooses the highest.\nThe syntax is **!elvenchad k**, where k=list of modifiers.",
+        "explode":"Rolls input dice and explode the result; it can sum modifiers.\nThe syntax is **!explode dk+mods**, where k=dice and mods is a list of modifiers.",
         "forall":"Rolls some dice and add modifiers to each result. The syntax is the same as !tira.",
         "help":"You are very mad if you've asked me this... why?",
         "member":"Sends as DM the number of member of this server; it doesn't count bots. Works only for admins.",
@@ -22,18 +22,19 @@
         "race":"Generates race height and weight according to d&d 5e table. The syntax is **!race name**, where name is the race you have (in italian or english)",
         "redo":"Repeat any command. You can activate it by replying to it and writing !redo.",
         "reset":"Reset the rng seed.",
-        "spell":"Get the list of available spells you can cast by send !<spell_name> <lv>.",
-        "stats":"Rolls 4 dice and sums the three highest. The syntax is **!stats x**, where x=many stats to generate (max 6).",
+        "spell":"Get the list of available spells you can cast.\nTo cast a spell, send !<spell_name> <lv>.",
+        "stats":"Rolls 4 dice and sums the three highest.\nThe syntax is **!stats x**, where x=many stats to generate (max 6).",
         "superstats":"Generates three times six stats to grant the user to pick one combination among 3",
-        "tira":"Rolls multiple dice (with also modifiers). The syntax is **!tira nds+c**, where n=number of dice, s=type of dice (among 2 and 256) and c=modifiers.\nIf the user puts a +/- beetween dice it will sum the results, if it's a blank space it will return separated results. Isolated numbers will be ignored.",
-        "tpc":"Rolls 1d20 and sums modifiers. The syntax is **!tpc x**, where x=modifiers (you must specify the sign).",
-        "ts":"Make a saving throw. The syntax is **!ts x <y**, where x=modifiers as in !tpc and y=dc of the saving throw."
+        "tira":"Rolls multiple dice (with also modifiers).\nThe syntax is **!tira nds+c**, where n=number of dice, s=type of dice (among 2 and 256) and c=modifiers.\nIf the user puts a +/- beetween dice it will sum the results, if it's a blank space it will return separated results. Isolated numbers will be ignored.",
+        "tpc":"Rolls 1d20 and sums modifiers.\nThe syntax is **!tpc x**, where x=modifiers (you must specify the sign).",
+        "ts":"Make a saving throw.\nThe syntax is **!ts x <y**, where x=modifiers as in !tpc and y=dc of the saving throw."
     },
 
     "aliases":{
         "adv":["vantaggio"],
         "cento":["100"],
         "dis":["svantaggio"],
+        "explode":["lc"],
         "member":["membri", "members"],
         "pg":["character", "char"],
         "race":["razza", "misure", "misura"],
