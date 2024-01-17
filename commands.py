@@ -121,7 +121,7 @@ async def race(ctx, *arg):
     """Generates the height and weight of specified race"""
     try:
         term = ' '.join(arg)        
-        race = DB._translateRace(term)
+        race = DB.translateRace(term)
         height, weight = DB.evaluateSize(var["dimension_table"][race], race)
         await ctx.channel.send(f"{ctx.message.author.global_name}'s {race} sizes: {height} cm and {weight} kg")
 
