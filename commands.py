@@ -247,6 +247,8 @@ async def firebolt(ctx, *lv):
                                                   spellName='fire bolt',
                                                   rolled=[randint(1,10) for _ in range(DB._getCantripLevel(level))],
                                                   dmgType='fire', emoji=':fire:'))
+    
+    # aggiungere fiamma sacra
 
 ##### 1ST LEVEL SPELLS #####
 @commands.command()
@@ -258,7 +260,7 @@ async def guidingbolt(ctx, *lv):
                                                   level=level,
                                                   spellName='guiding bolt',
                                                   rolled=[randint(1,6) for _ in range(3+level)],
-                                                  dmgType='fire', emoji=':fire:'))
+                                                  dmgType='radiant', emoji=':sparkles:'))
 
 @commands.command()
 async def wounds(ctx, *lv):

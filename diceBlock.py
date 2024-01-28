@@ -30,12 +30,15 @@ def string2dice(L:list):
 
     C=[L[0].lower()]
     for i in range(1,len(L)):
-        if L[i][0] in ('+','-'):
+        if L[i][0] in ('+','-'):    # starts with +/-
             C[-1] += L[i].lower()
-        elif L[i][-1] in ('+','-'):
+        elif L[i][-1] in ('+','-'):     # ends with +/-
             L[i + 1] = L[i] + L[i + 1]
         else:
-            C.append(L[i].lower())
+            if C[-1][-1] in ('+', '-'):
+                C[-1] += L[i].lower()
+            else:
+                C.append(L[i].lower())
     C = [i for i in C if 'd' in i]  #removes unused constants
 
     # if there are no dice, raise an error

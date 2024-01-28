@@ -1,5 +1,5 @@
 {
-    "copyright":"Samuele Ferri 2024\t\t\t\t Bot version: 4.0.1",
+    "copyright":"Samuele Ferri 2024\t\t\t\t Bot version: 4.1.0",
 
     "help_description": "Type !help [command] for more info on a specific command; works also with a list of commands separated by a blank space.",
 
@@ -17,7 +17,7 @@
         "forall":"Rolls some dice and add modifiers to each result. The syntax is the same as !tira.",
         "help":"You are very mad if you've asked me this... why?",
         "member":"Sends as DM the number of member of this server; it doesn't count bots. Works only for admins.",
-        "pg":"Creates a random character, selecting the race, the class, the sizes and its statblock.",
+        "pg":"Creates a random character, selecting the race, the class, the sizes and its statblock.\nYou can add pairs 'key=value' to your message to set specific details during the creation (for example the race or the class). The available keys are **'level'**, **'race'** and **'class'**",
         "ping":"Shows the current bot latency.",
         "race":"Generates race height and weight according to d&d 5e table. The syntax is **!race name**, where name is the race you have (in italian or english)",
         "redo":"Repeat any command. You can activate it by replying to it and writing !redo.",
@@ -25,7 +25,7 @@
         "spell":"Get the list of available spells you can cast.\nTo cast a spell, send !<spell_name> <lv>.",
         "stats":"Rolls 4 dice and sums the three highest.\nThe syntax is **!stats x**, where x=many stats to generate (max 6).",
         "superstats":"Generates three times six stats to grant the user to pick one combination among 3",
-        "tira":"Rolls multiple dice (with also modifiers).\nThe syntax is **!tira nds+c**, where n=number of dice, s=type of dice (among 2 and 256) and c=modifiers.\nIf the user puts a +/- beetween dice it will sum the results, if it's a blank space it will return separated results. Isolated numbers will be ignored.",
+        "tira":"Rolls multiple dice (with also modifiers).\nThe syntax is **!tira nds+c**, where n=number of dice, s=type of dice (among 2 and 256) and c=modifiers.\nIf you put a +/- beetween dice, results will be sumed; if you put a blank space in between, separated results will be returned. Isolated numbers will be ignored, unless ",
         "tpc":"Rolls 1d20 and sums modifiers.\nThe syntax is **!tpc x**, where x=modifiers (you must specify the sign).",
         "ts":"Make a saving throw.\nThe syntax is **!ts x <y**, where x=modifiers as in !tpc and y=dc of the saving throw."
     },
