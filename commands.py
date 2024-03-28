@@ -1,6 +1,5 @@
 from discord.ext import commands
 from random import randint
-from json import load
 from random import choice
 import diceBlock as DB
 from diceBlock import VARIABLES as var
@@ -30,7 +29,7 @@ async def cento(ctx):
             result = f'`[{result}]`'
     await ctx.channel.send(f"{ctx.message.author.global_name}'s d100: {result}")
 
-@commands.command()
+@commands.command(alises=('moneta',))
 async def coin(ctx):
     """Command to toss a coin"""
     c = DB.coin()

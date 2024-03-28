@@ -33,6 +33,7 @@
     "aliases":{
         "adv":["vantaggio"],
         "cento":["100"],
+        "coin":["moneta"],
         "dis":["svantaggio"],
         "explode":["lc"],
         "member":["membri", "members"],

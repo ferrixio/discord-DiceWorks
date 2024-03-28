@@ -6,6 +6,9 @@ Legend:
 * = bug fixing
 ^ = miscellaneous
 
+## Version 4.1.1 (to be released)
++ Added alias to 'coin' command
+
 ## Version 4.1.0
 * Changed the logic behind the rolls like "!tira 5 - 1d20 + 1 -2d6". Now the only way to separate rolls is to put blank spaces WITH NO +/- between them
 * Fixed some typos in some sentences
