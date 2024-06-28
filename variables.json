@@ -1,5 +1,5 @@
 {
-    "copyright":"Samuele Ferri 2024\t\t\t\t Bot version: 4.1.0",
+    "copyright":"Samuele Ferri 2024\t\t\t\t Bot version: 4.1.2",
 
     "help_description": "Type !help [command] for more info on a specific command; works also with a list of commands separated by a blank space.",
 
@@ -16,6 +16,8 @@
         "explode":"Rolls input dice and explode the result; it can sum modifiers.\nThe syntax is **!explode dk+mods**, where k=dice and mods is a list of modifiers.",
         "forall":"Rolls some dice and add modifiers to each result. The syntax is the same as !tira.",
         "help":"You are very mad if you've asked me this... why?",
+        "join":"Let the bot joins the voice channel where you are connected into.",
+        "leave":"Disconnects the bot from voice channels",
         "member":"Sends as DM the number of member of this server; it doesn't count bots. Works only for admins.",
         "pg":"Creates a random character, selecting the race, the class, the sizes and its statblock.\nYou can add pairs 'key=value' to your message to set specific details during the creation (for example the race or the class). The available keys are **'level'**, **'race'** and **'class'**",
         "ping":"Shows the current bot latency.",

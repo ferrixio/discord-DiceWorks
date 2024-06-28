@@ -1,6 +1,7 @@
 from os import getenv
 from dotenv import load_dotenv
 from discord import Embed
+from discord.utils import get
 from diceBlock import VARIABLES as var
 
 ACQUA=0x1ABC9C      #Color verde-acqua
@@ -48,6 +49,8 @@ dic_global_help={
             "**superstats**: select a statblock among 3\n"+"¬"*50,
         
         "miscellaneous":
+            "**join**: bot will join you in voice chat\n" +\
+            "**leave**: disconnects the bot from voice chat\n" +\
             "**member**: sends the number of member of this server as DM\n" +\
             "**ping**: shows bot current latency\n"+\
             "**redo**: repeat any command by replying to it\n"+\
@@ -61,7 +64,7 @@ class ServerUtilities:
     There are three sets of functions:
     - Custom help function -> used to create a custom help command
     - Special message functions -> used to send custom message
-    - Welcome functions -> used to manage custom welcome message
+    - Voice functions -> used to manage voice chatting
     """
 
     ### CUSTOM EMBEDDED MESSAGES ###
@@ -77,7 +80,7 @@ class ServerUtilities:
     
         elif "full" in terms or "all" in terms:
             fullPresence = True
-            em = Embed(title=f"{name}'s full command list", colour=ACQUA, description="Sorted in alphabetic order")
+            em = Embed(title=f":notebook_with_decorative_cover: {name}'s full command list", colour=ACQUA, description="Sorted in alphabetic order")
             for i in dic_local_help:
                 try:
                     als = f" (aliases: {', '.join(aliases[i])})"
@@ -136,3 +139,9 @@ class ServerUtilities:
                 'Visco-sensei, mi ha chiamato?'*(str(user_id)==VISCO)+\
                 'Daniel nya! Swono al tuwo sewizio UwU'*(str(user_id)==DANIEL)+\
                 (username+", sarò l'incarnazione della tua fortuna. !help per sapere quali sono i miei servizi.")*(str(user_id) not in nomi)
+    
+    ### VOICE FUNCTIONS ###
+    def is_connected(ctx) -> bool:
+        """Returns true if the bot is currently connected to a voice chat"""
+        voice_client = get(ctx.bot.voice_clients, guild=ctx.guild)
+        return voice_client and voice_client.is_connected()

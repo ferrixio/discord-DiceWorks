@@ -3,7 +3,7 @@
 
 :dragon: Author: Samuele Ferri ([@ferrixio](https://github.com/ferrixio), ferri#9207)
 
-:star: Version 4.1.1
+:star: Version 4.1.2
 
 ## Requirements
 
@@ -36,3 +36,7 @@ Main feature of the bot is roll dice in the following way:
 `!tira 1d20+3 2d10-1` -> `Tiro di ferrixio:  [1], [3, 3],  totale: [4, 5]`
 
 Moreover you can invoke commands again by reply to it with the command `!redo`.
+
+## :paperclip: What's new in latest version?
+
+Recently I started to think that we need to evolve the bot to a voice-bot. I'm working to make this possible!
