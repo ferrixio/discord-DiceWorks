@@ -23,6 +23,8 @@ async def cento(ctx):
     match result:
         case 0:
             result = ':zero:'
+        case 69:
+            result = ':peach:'
         case 100:
             result = ':100:'
         case _ :

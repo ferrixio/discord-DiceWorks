@@ -316,7 +316,7 @@ def van_svg(L:list, term:str, name:str):
             total += i
         singleSums.append(total)
         dice += die
-    
+
     #Cool custom answers. It checks only the first set of results
     for i in range(len(finalResults)):
         if max(finalResults[i]) == dice[i] and min(finalResults[i]) == dice[i]:
@@ -332,7 +332,7 @@ def van_svg(L:list, term:str, name:str):
             ans = f'Uh?\t {name}:'
             break
         else:
-            ans = f'La {"s"*(term == "dis")}fortuna di {name} dice'
+            ans = f'La {"s"*(term == "dis")}fortuna di {name} è'
             break
             
     finalResults = erase_parethesis(finalResults,'')

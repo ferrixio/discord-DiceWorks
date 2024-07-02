@@ -8,6 +8,7 @@ Legend:
 
 ## Version 4.1.2 (to be released)
 + Added `join` and `leave` for voice chatting with the bot
++ Added the nice 69 answer to !cento
 
 ## Version 4.1.1
 + Added alias to 'coin' command
