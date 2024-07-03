@@ -73,7 +73,7 @@
         "dragonborn": ["dragonide", "dragonborn"],
         "gnome": ["gnome", "gnomo"],
         "halfelf": ["halfelf", "mezzelfo", "mezz'elfo"],
-        "halforc": ["halforc", "mezzorco", "mezzo'orco"],
+        "halforc": ["halforc", "mezzorco", "mezz'orco"],
         "tiefling": ["tiefling"]
     },
 

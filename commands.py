@@ -21,8 +21,6 @@ async def cento(ctx):
     from random import randint
     result = randint(1,100)
     match result:
-        case 0:
-            result = ':zero:'
         case 69:
             result = ':peach:'
         case 100:
@@ -124,7 +122,7 @@ async def race(ctx, *arg):
         term = ' '.join(arg)        
         race = DB.translateRace(term)
         height, weight = DB.evaluateSize(var["dimension_table"][race], race)
-        await ctx.channel.send(f"{ctx.message.author.global_name}'s {race} sizes: {height} cm and {weight} kg")
+        await ctx.channel.send(f"{ctx.message.author.global_name}'s **{race}** sizes:\n:straight_ruler: {height} cm \t\t :scales: {weight} kg")
 
     except:
         await ctx.channel.send("I don't know this race")

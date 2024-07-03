@@ -152,7 +152,7 @@ def elvenacc(L:list):
     finalResults = rolledDice*(P < min(rolledDice)) + [max(rolledDice),P]*(P >= min(rolledDice))
     return rolledDice, P, finalResults, max(finalResults)+to_add
 
-def evaluateSize(L:list, race:str):
+def evaluateSize(L:list, race:str) -> tuple[float, float]:
     """Evaluate the sizes of the character from its table"""
     roll_h = [randint(1,L[2]) for _ in range(2)]
     if race in ('elf', 'wood_elf', 'drow'):
