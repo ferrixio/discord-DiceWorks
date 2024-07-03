@@ -68,8 +68,9 @@ async def help(ctx,*arg):
         else:
             await ctx.channel.send(embed=em)
 
-        owner = await bot.fetch_user(getenv('FERRI'))
-        await owner.send("Ricordati che hai anche i comandi del gruppo ferri: guilds, updrage, send")
+        if str(ctx.message.author.id) == getenv('FERRI'):
+            owner = await bot.fetch_user(getenv('FERRI'))
+            await owner.send("Ricordati che hai anche i comandi del gruppo ferri: guilds, updrage, send")
 
     except Exception as e:
         await ctx.reply(e, mention_author=False)
