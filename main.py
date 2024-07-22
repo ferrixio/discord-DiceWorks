@@ -150,6 +150,16 @@ async def send(ctx, *, msg):
             else:
                 break
 
+@ferri.command()
+@commands.is_owner()
+async def write(ctx, *, msg):
+    """Writes a new sentence in the mockery file"""
+    with open('mockery.txt', 'a') as f:
+        f.write(f'\n{msg}')
+
+    owner = await bot.fetch_user(getenv('FERRI'))   # retrieve owner user by its ID
+    await owner.send(f'Added to mockery.txt: {msg}')
+
 
 @bot.command()
 async def join(ctx):

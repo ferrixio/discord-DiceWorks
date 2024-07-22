@@ -95,7 +95,7 @@
     },
 
     "spell_list":{
-        "cantrip":["blast (eldritch blast)", "chilltouch", "firebolt"],
+        "cantrip":["blast (eldritch blast)", "chilltouch", "firebolt", "flame (sacred flame)", "mock (vicious mockery)"],
         "1st-level":["guidingbolt","wounds (inflict wounds)","sleep"],
         "2nd-level":["shadowblade"],
         "3rd-level":["fireball"],

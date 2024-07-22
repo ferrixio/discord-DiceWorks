@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, choice
 from json import load
 from math import floor
 from typing import Any
@@ -346,6 +346,11 @@ def _buildSpellSentence(author:str, level:int, spellName:str, rolled:list[int], 
     """Returns the output string of spell casting"""
     if spellName != 'sleep':
         dmgType += ' damage'
+
+    if spellName == 'vicious mockery':
+        with open('mockery.txt', 'r') as f:
+            l = choice(f.read().split('\n'))
+            emoji += f"\nLe parole di {author} rimbombano: *{l}* "
 
     return f"{author}'s level {level} {spellName}: `{rolled} -> {sum(rolled)} {dmgType}` {emoji}"    
 

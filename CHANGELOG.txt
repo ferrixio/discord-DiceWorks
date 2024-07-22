@@ -8,6 +8,8 @@ Legend:
 
 ## Version 4.2.0 (to be released)
 + Added `jennystats` as alternative to `stats`
++ Added sacred flame and vicious mockery cantrips
++ Added `write` command to add mockeries in an external file
 ^ Improved the diceBlock.stats function
 
 ## Version 4.1.2

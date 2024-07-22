@@ -265,7 +265,28 @@ async def firebolt(ctx, *lv):
                                                   rolled=[randint(1,10) for _ in range(DB._getCantripLevel(level))],
                                                   dmgType='fire', emoji=':fire:'))
     
-    # aggiungere fiamma sacra
+@commands.command(aliases=('sacred','sacredflame','sflame'))
+async def flame(ctx, *lv):
+    """Casts sacred flame. lv is the player level.
+    This spell comes from dnd 5e as evocation cantrip"""
+    level = DB.coercePlayerLevel(lv)
+    await ctx.channel.send(DB._buildSpellSentence(author=ctx.message.author.global_name,
+                                                  level=level,
+                                                  spellName='sacred flame',
+                                                  rolled=[randint(1,8) for _ in range(DB._getCantripLevel(level))],
+                                                  dmgType='radiant', emoji=':sparkles:'))
+    
+@commands.command(aliases=('vicious','viciousmockery'))
+async def mock(ctx, *lv):
+    """Casts vicious mockery. lv is the player level.
+    This spell comes from dnd 5e as enchantement cantrip"""
+    level = DB.coercePlayerLevel(lv)
+    await ctx.channel.send(DB._buildSpellSentence(author=ctx.message.author.global_name,
+                                                  level=level,
+                                                  spellName='vicious mockery',
+                                                  rolled=[randint(1,4) for _ in range(DB._getCantripLevel(level))],
+                                                  dmgType='pychic', emoji=':exploding_head:'))
+
 
 ##### 1ST LEVEL SPELLS #####
 @commands.command()
@@ -330,7 +351,7 @@ async def fireball(ctx, *lv):
 async def setup(bot):
     CMD_LIST = (adv, cento, coin, dis, elvenchad, explode, forall, jennystats, pg, race, reset, stats,
                 superstats, tira, tpc, ts)
-    SPELL_LIST = (blast, chilltouch, firebolt, fireball, guidingbolt, wounds, shadowblade, sleep)
+    SPELL_LIST = (blast, chilltouch, firebolt, fireball, flame, guidingbolt, mock, wounds, shadowblade, sleep)
     
     for i in CMD_LIST+SPELL_LIST:
         bot.add_command(i)
