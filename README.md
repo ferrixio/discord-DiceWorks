@@ -1,5 +1,5 @@
 # Discord DiceWorks
-###  Discord bot to roll dice for rpg like D&amp;D or Savage World
+###  Discord bot to roll dice for rpg like D&amp;D
 
 :dragon: Author: Samuele Ferri ([@ferrixio](https://github.com/ferrixio), ferri#9207)
 
@@ -26,17 +26,11 @@ This bot can do many things:
     > advantage & disavantage rolls
     > saving throws
     > toss coins
-    > stats and sizes generator for D&ampD 5e
+    > character creation for D&ampD 5e
     > explosive rolls
+    
+and much more!
 
-Dice Generator is currently run on a server, and if you want to add to your server (and also customize it) just write to me.
+If you want to add **DiceWorks** to your server (and also customize it) just write to me.
 
-Main feature of the bot is roll dice in the following way:
-
-`!tira 1d20+3 2d10-1` -> `Tiro di ferrixio:  [1], [3, 3],  totale: [4, 5]`
-
-Moreover you can invoke commands again by reply to it with the command `!redo`.
-
-## :paperclip: What's new in latest version?
-
-Recently I started to think that we need to evolve the bot to a voice-bot. I'm working to make this possible!
+Main feature of the bot is roll dice in the following way: `!tira 1d20+3 2d10-1` -> `Tiro di ferrixio:  [1], [3, 3] -> [4, 5]`

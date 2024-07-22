@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 from os import getenv
 from dotenv import load_dotenv
-from utilities import ServerUtilities
+from utilities import ServerUtilities, PaginationView
 from time import time
 
 load_dotenv()
@@ -64,11 +64,12 @@ async def help(ctx,*arg):
     try:
         em, fP = ServerUtilities.custom_help(arg, bot.user.name)
         if fP:
-            await ctx.author.send(embed=em)
-        else:
-            await ctx.channel.send(embed=em)
+            await ctx.author.send(embed=em); return
+        elif em:
+            await ctx.channel.send(embed=em); return
 
-        # DO NOT ADD THE REMINDER FOR OWNER-ONLY COMMAND! 
+        newPagination = PaginationView(botName=bot.user.name)
+        await newPagination.send(ctx)
 
     except Exception as e:
         await ctx.reply(e, mention_author=False)

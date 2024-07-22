@@ -1,6 +1,6 @@
 from os import getenv
 from dotenv import load_dotenv
-from discord import Embed
+from discord import Embed, ui, ButtonStyle, Interaction
 from discord.utils import get
 from diceBlock import VARIABLES as var
 
@@ -22,40 +22,10 @@ copyright = "©"+var["copyright"]
 help_desc = var["help_description"]
 help_short = var["help_short"]
 help_spell = var["help_spell"]
+dic_global_help = var["dic_global_help"]
 dic_local_help = var["dic_local_help"]
 dic_spell_list = var["spell_list"]
 aliases = var["aliases"]
-
-dic_global_help={
-        "standard":
-            "**tira**: rolls dice with modifiers\n" +\
-            "**tpc**: rolls a single d20; can add modifiers\n" +\
-            "**ts**: makes a saving throw (add '<x' for the dc)\n" +\
-            "**cento**: rolls 1d100; can't add modifiers\n" +\
-            "**coin**: tosses a coin\n" +"¬"*50,
-
-        "advanced":
-            "**adv**: advantage roll (with modifiers)\n" +\
-            "**dis**: disadvantage roll (with modifiers)\n" +\
-            "**elvenchad**: elven accuracy feature\n" +\
-            "**explode**: explosive dice rolls (with modifiers)\n" +\
-            "**forall**: rolls dice and add modifiers to each result\n"\
-            "**spell**: know which spells you can throw with !<name>\n"+"¬"*50,
-
-        "characters":
-            "**jennystats**: alternative statblock generator\n" +\
-            "**pg**: creates a lv 1 random character\n" +\
-            "**race**: size generator for d&d 5e\n" +\
-            "**stats**: statblock generator for d&d 5e\n" +\
-            "**superstats**: select a statblock among 3\n"+"¬"*50,
-        
-        "miscellaneous":
-            "**join**: bot will join you in voice chat\n" +\
-            "**leave**: disconnects the bot from voice chat\n" +\
-            "**member**: sends the number of member of this server as DM\n" +\
-            "**ping**: shows bot current latency\n"+\
-            "**redo**: repeat any command by replying to it\n"+\
-            "**reset**: reset the rng seed\n"+"¬"*50}
 
 
 class ServerUtilities:
@@ -73,11 +43,8 @@ class ServerUtilities:
         """Custom help function build using embed from discord"""
         fullPresence = False
         if terms == ():
-            em = Embed(title=f":notebook_with_decorative_cover: {name}'s command list", colour=ACQUA, description=help_desc)
-            em.add_field(name="Standard tools", value=dic_global_help["standard"], inline=False)
-            em.add_field(name="Advanced tools", value=dic_global_help["advanced"], inline=False)
-            em.add_field(name="Character generation", value=dic_global_help["characters"], inline=False)
-            em.add_field(name="Miscellaneous", value=dic_global_help["miscellaneous"])
+            # do nothing and activate the new help message in the main
+            return None, None
     
         elif "full" in terms or "all" in terms:
             fullPresence = True
@@ -102,6 +69,7 @@ class ServerUtilities:
         em.set_footer(text=copyright)
         if not em.fields:
             raise TypeError('Command not found')
+        
         return em, fullPresence
     
     def spellList():
@@ -134,15 +102,119 @@ class ServerUtilities:
         """Helping function to message "master" (it's a pseudo-ping-pong command)"""
 
         return 'Mio supremo creatore, sono al tuo servizio'*(str(user_id)==FERRI)+\
-                'Padroncino Omar, che cosa posso fare per te?'*(str(user_id)==OMAR)+\
-                'Lapo-sama, farò tutto ciò che desidera'*(str(user_id)==LAPO)+\
-                'Rusnejat caro, sono uscita dal Cubespace solo per te :heart:. In che modo posso esserti utile?'*(str(user_id)==CENTO)+\
-                'Visco-sensei, mi ha chiamato?'*(str(user_id)==VISCO)+\
-                'Daniel nya! Swono al tuwo sewizio UwU'*(str(user_id)==DANIEL)+\
-                (username+", sarò l'incarnazione della tua fortuna. !help per sapere quali sono i miei servizi.")*(str(user_id) not in nomi)
+            'Padroncino Omar, che cosa posso fare per te?'*(str(user_id)==OMAR)+\
+            'Lapo-sama, farò tutto ciò che desidera'*(str(user_id)==LAPO)+\
+            'Rusnejat caro, sono uscita dal Cubespace solo per te :heart:. In che modo posso esserti utile?'*(str(user_id)==CENTO)+\
+            'Visco-sensei, mi ha chiamato?'*(str(user_id)==VISCO)+\
+            'Daniel nya! Swono al tuwo sewizio UwU'*(str(user_id)==DANIEL)+\
+            (username+", sarò l'incarnazione della tua fortuna. !help per sapere cosa sono in grado di fare.")*(str(user_id) not in nomi)
     
     ### VOICE FUNCTIONS ###
     def is_connected(ctx) -> bool:
         """Returns true if the bot is currently connected to a voice chat"""
         voice_client = get(ctx.bot.voice_clients, guild=ctx.guild)
         return voice_client and voice_client.is_connected()
+
+
+### Embeded menu with buttons ###
+class PaginationView(ui.View):
+
+    def __init__(self, *, timeout: float | None = 180, botName:str):
+        self.botName = botName
+        super().__init__(timeout=timeout)
+
+    async def send(self, ctx):
+        self.message = await ctx.channel.send(view=self)
+        await self.update_message(1)
+        
+    @staticmethod
+    def _addField(em:Embed, dictKey:str) -> Embed:
+        """Add field of the selected dictionary key to the embed"""
+        for k in dic_global_help[dictKey]:
+            try:
+                als = f" (aliases: {', '.join(aliases[k])})"
+            except:
+                als = ''
+            em.add_field(name=k+als, value=dic_local_help[k], inline=False)
+
+        return em
+
+    def create_embed(self, page:int):
+        """Creates the embedded message of the respective page.
+        Page list:
+        - 1 = standard rolls
+        - 2 = advanced rolls
+        - 3 = characters creation
+        - 4 = spell list
+        - 5 = miscellaneous"""
+        em = Embed(colour=ACQUA, description=help_desc)
+        match page:
+            case 1: # standard rolls
+                em.title = f":notebook_with_decorative_cover: {self.botName}'s standard commands"
+                em = self._addField(em, "standard")
+            
+            case 2: # advanced rolls
+                em.title = f":bookmark: {self.botName}'s advanced commands"
+                em = self._addField(em, "advanced")
+                
+            case 3: # char creation
+                em.title = f":star2: {self.botName}'s characters creation commands"
+                em = self._addField(em, "characters")
+            
+            case 4: # spell list
+                em.title = f":scroll: {self.botName}'s Spell list"
+                for key, value in dic_spell_list.items():
+                    if value:
+                        em.add_field(name=key, value='\n'.join(value), inline=True)
+                em.add_field(name="Rules", value=help_spell, inline=False)
+            
+            case 5: # miscellaneous
+                em.title = f":placard: {self.botName}'s miscellaneous commands"
+                em = self._addField(em, "miscellaneous")
+            
+            case _:
+                pass
+
+        em.set_footer(text=copyright)
+        return em
+
+    async def update_message(self, newPage:int):
+        """Updates the embedded message with the new page"""
+        await self.message.edit(embed=self.create_embed(newPage), view=self)
+
+    def update_buttons(self):
+        """Update the graphics of the buttons in the embed"""
+        pass
+
+    @ui.button(label='Standard',
+               style=ButtonStyle.primary)
+    async def std_button(self, interaction:Interaction, button: ui.Button):
+        await interaction.response.defer()
+        await self.update_message(1)
+
+    @ui.button(label='Advanced',
+               style=ButtonStyle.primary)
+    async def adv_button(self, interaction:Interaction, button: ui.Button):
+        await interaction.response.defer()
+        await self.update_message(2)
+
+    @ui.button(label='Characters',
+               style=ButtonStyle.success)
+    async def chr_button(self, interaction:Interaction, button: ui.Button):
+        await interaction.response.defer()
+        await self.update_message(3)
+
+    @ui.button(label='Spell list',
+               style=ButtonStyle.danger)
+    async def spl_button(self, interaction:Interaction, button: ui.Button):
+        await interaction.response.defer()
+        await self.update_message(4)
+
+    @ui.button(label='Miscellaneous',
+               style=ButtonStyle.secondary)
+    async def msc_button(self, interaction:Interaction, button: ui.Button):
+        await interaction.response.defer()
+        await self.update_message(5)
+
+    
+    

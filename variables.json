@@ -7,30 +7,37 @@
 
     "help_spell": "To automatically increment the dice to roll, add a number in the message (the **character level** for cantrips and the **used spell slot** for normal spells).",
 
+    "dic_global_help":{
+        "standard":["tira", "tpc", "ts", "cento", "coin"],
+        "advanced":["adv","dis","elvenchad","explode","forall","spell"],
+        "characters":["pg","race","stats","superstats", "jennystats"],
+        "miscellaneous":["join","leave","member","ping","redo","reset"]
+    },
+
     "dic_local_help":{
-        "adv":"Rolls dice and chooses the highest.\nThe syntax is **!adv nds+c**, where n=number of dice, s=amplitude of dice, c=list of modifiers. Can make multiple rolls separating dice with a blank space.",
-        "cento":"Rolls a single d100; no input required.",
-        "coin":"Tosses a coin; no input required. It has a 1/256 chance to give a tie.",
-        "dis":"Rolls dice and chooses the lowest.\nThe syntax is **!dis nds+c**, where n=number of dice, s=amplitude of dice, c=list of modifiers. Can make multiple rolls separating dice with a blank space.",
-        "elvenchad":"Rolls 2d20 (with also modifiers), rerolls the least and chooses the highest.\nThe syntax is **!elvenchad k**, where k=list of modifiers.",
-        "explode":"Rolls input dice and explode the result; it can sum modifiers.\nThe syntax is **!explode dk+mods**, where k=dice and mods is a list of modifiers.",
-        "forall":"Rolls some dice and add modifiers to each result. The syntax is the same as !tira.",
+        "adv":"Rolls dice and chooses the highest.\nThe syntax is **!adv nds+c**, where _n = number of dice_, _s = amplitude of dice_, _c = list of modifiers_. Can make multiple rolls separating dice with a blank space",
+        "cento":"Rolls a single **d100**; other input will be ignored",
+        "coin":"Tosses a coin; other input will be ignored. It has a 1/256 chance to give a tie",
+        "dis":"Rolls dice and chooses the lowest.\nThe syntax is **!dis nds+c**, where _n = number of dice_, _s =amplitude of dice_, _c =list of modifiers_. Can make multiple rolls separating dice with a blank space",
+        "elvenchad":"Rolls **2d20** (with also modifiers), rerolls the least and chooses the highest.\nThe syntax is **!elvenchad k**, where _k = list of modifiers_",
+        "explode":"Rolls input dice and explode the result; it can sum modifiers.\nThe syntax is **!explode dk+mods**, where _k = dice_ and _mods_ is a list of modifiers",
+        "forall":"Rolls some dice and add modifiers to each result. The syntax is the same as _!tira_",
         "help":"You are very mad if you've asked me this... why?",
-        "jennystats":"Rolls 5 dice and sums the three highest.\nThe syntax is **!jennystats x**, where x=many stats to generate (max 6).",
-        "join":"Let the bot joins the voice channel where you are connected into.",
+        "jennystats":"Rolls 5 dice and sums the three highest.\nThe syntax is **!jennystats x**, where _x = many stats to generate_ (max 6)",
+        "join":"Let the bot joins the voice channel where you are connected into",
         "leave":"Disconnects the bot from voice channels",
-        "member":"Sends as DM the number of member of this server; it doesn't count bots. Works only for admins.",
+        "member":"Sends as DM the number of member of this server; it doesn't count bots. Works only for admins",
         "pg":"Creates a random character, selecting the race, the class, the sizes and its statblock.\nYou can add pairs 'key=value' to your message to set specific details during the creation (for example the race or the class). The available keys are **'level'**, **'race'** and **'class'**",
-        "ping":"Shows the current bot latency.",
+        "ping":"Shows the current bot latency",
         "race":"Generates race height and weight according to d&d 5e table. The syntax is **!race name**, where name is the race you have (in italian or english)",
-        "redo":"Repeat any command. You can activate it by replying to it and writing !redo.",
-        "reset":"Reset the rng seed.",
-        "spell":"Get the list of available spells you can cast.\nTo cast a spell, send !<spell_name> <lv>.",
-        "stats":"Rolls 4 dice and sums the three highest.\nThe syntax is **!stats x**, where x=many stats to generate (max 6).",
+        "redo":"Repeat any command. You can activate it by replying to it and writing **!redo**",
+        "reset":"Reset the rng seed",
+        "spell":"Get the list of available spells you can cast.\nTo cast a spell, send ***!<spell_name> <lv>***",
+        "stats":"Rolls 4 dice and sums the three highest.\nThe syntax is **!stats x**, where _x = many stats to generate_ (max 6)",
         "superstats":"Generates three times six stats to grant the user to pick one combination among 3",
-        "tira":"Rolls multiple dice (with also modifiers).\nThe syntax is **!tira nds+c**, where n=number of dice, s=type of dice (among 2 and 256) and c=modifiers.\nIf you put a +/- beetween dice, results will be sumed; if you put a blank space in between, separated results will be returned. Isolated numbers will be ignored, unless ",
-        "tpc":"Rolls 1d20 and sums modifiers.\nThe syntax is **!tpc x**, where x=modifiers (you must specify the sign).",
-        "ts":"Make a saving throw.\nThe syntax is **!ts x <y**, where x=modifiers as in !tpc and y=dc of the saving throw."
+        "tira":"Rolls dice (with also modifiers).\nThe syntax is **!tira nds+c**, where _n = number of dice_, _s = type of dice (among 2 and 256)_ and _c = modifiers_.\nIf you put a +/- beetween dice, results will be sumed; if you put a blank space in between, separated results will be returned.\nIsolated numbers will be ignored",
+        "tpc":"Rolls 1d20 and sums modifiers.\nThe syntax is **!tpc x**, where _x = modifiers_ (you must specify the sign)",
+        "ts":"Make a saving throw.\nThe syntax is **!ts x <y**, where _x = modifiers_ as in _!tpc_ and _y = dc of the saving throw_"
     },
 
     "aliases":{
