@@ -43,6 +43,7 @@ dic_global_help={
             "**spell**: know which spells you can throw with !<name>\n"+"¬"*50,
 
         "characters":
+            "**jennystats**: alternative statblock generator\n" +\
             "**pg**: creates a lv 1 random character\n" +\
             "**race**: size generator for d&d 5e\n" +\
             "**stats**: statblock generator for d&d 5e\n" +\

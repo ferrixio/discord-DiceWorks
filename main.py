@@ -1,5 +1,5 @@
 #### Dice Generator for Discord ####
-#©Samuele Ferri 2024      Bot version: 4.1.2
+#©Samuele Ferri 2024      Bot version: 4.2.0
 
 import discord
 from discord.ext import commands

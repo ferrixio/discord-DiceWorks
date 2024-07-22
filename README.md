@@ -3,7 +3,7 @@
 
 :dragon: Author: Samuele Ferri ([@ferrixio](https://github.com/ferrixio), ferri#9207)
 
-:star: Version 4.1.2
+:star: Version 4.2.0
 
 ## Requirements
 

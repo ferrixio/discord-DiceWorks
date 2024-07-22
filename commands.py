@@ -83,6 +83,24 @@ async def forall(ctx,*arg):
     except Exception as e:
         await ctx.reply(e, mention_author=False)
 
+@commands.command()
+async def jennystats(ctx, *arg):
+    """Command to generate stats for dnd 5e in an alternative way with respect to !stats"""
+    try:
+        text = ""
+        if not arg:
+            arg = ('6',)
+        R,serie,dist = DB.stats(int(''.join(arg)), jenny=True)
+        for i in range(len(R)):
+            text += R[i]
+            text = text + ("\t :four_leaf_clover:")*(serie[i] == 18) + ("\t :broken_heart:")*(serie[i] == 3)+"\n"
+        message = f"{ctx.message.author.global_name}'s requested jenny-statblock\n" +\
+            text + f'Distance from standard serie = {dist}'*(bool(dist))
+        await ctx.channel.send(message)
+
+    except Exception as e:
+        await ctx.reply(e, mention_author=False)
+
 @commands.command(aliases=('character', 'char'))
 async def pg(ctx, *arg):
     """Generates a pg (statblock and sizes) according to dnd 5e"""
@@ -310,7 +328,7 @@ async def fireball(ctx, *lv):
 
 # This method must be here. It adds the commands to the bot
 async def setup(bot):
-    CMD_LIST = (adv, cento, coin, dis, elvenchad, explode, forall, pg, race, reset, stats,
+    CMD_LIST = (adv, cento, coin, dis, elvenchad, explode, forall, jennystats, pg, race, reset, stats,
                 superstats, tira, tpc, ts)
     SPELL_LIST = (blast, chilltouch, firebolt, fireball, guidingbolt, wounds, shadowblade, sleep)
     

@@ -1,5 +1,5 @@
 {
-    "copyright":"Samuele Ferri 2024\t\t\t\t Bot version: 4.1.2",
+    "copyright":"Samuele Ferri 2024\t\t\t\t Bot version: 4.2.0",
 
     "help_description": "Type !help [command] for more info on a specific command; works also with a list of commands separated by a blank space.",
 
@@ -16,6 +16,7 @@
         "explode":"Rolls input dice and explode the result; it can sum modifiers.\nThe syntax is **!explode dk+mods**, where k=dice and mods is a list of modifiers.",
         "forall":"Rolls some dice and add modifiers to each result. The syntax is the same as !tira.",
         "help":"You are very mad if you've asked me this... why?",
+        "jennystats":"Rolls 5 dice and sums the three highest.\nThe syntax is **!jennystats x**, where x=many stats to generate (max 6).",
         "join":"Let the bot joins the voice channel where you are connected into.",
         "leave":"Disconnects the bot from voice channels",
         "member":"Sends as DM the number of member of this server; it doesn't count bots. Works only for admins.",

@@ -253,7 +253,7 @@ def standard_roll(L:list):
     finalResults = erase_parethesis(finalResults,'')
     return finalResults,hasLengthOne(sums)  
 
-def stats(amount:int) -> tuple[list, list, int]:
+def stats(amount:int, jenny:bool = False) -> tuple[list, list, int]:
     """Function that generates up to 6 stats for D&D 5e. It rolls 4d6 and sums the three highest.\n
     Automatically convert the requested quantity in
         - a 6 if amount is above 6 or below -6
@@ -266,17 +266,19 @@ def stats(amount:int) -> tuple[list, list, int]:
         amount = abs(int(amount))
     
     for i in range(0,amount):
-        stats = roll(4,6,True)
-        remainingValues = stats.pop(stats.index(min(stats)))  #remove min value of stats
-        outputStr.append(f"`Stat {i+1}:\t{stats+[remainingValues]}\t{sum(stats)} -> {_getModifier(stats)}`")
-        serie.append(sum(stats))
+        n, sl = 4 + jenny, 1 + jenny  
+        stats = roll(n,6,True)
+        stats.sort()
+
+        outputStr.append(f"`Stat {i+1}:\t{stats}\t{sum(stats[sl:])} -> {_getModifier(stats[sl:])}`")
+        serie.append(sum(stats[sl:]))
 
     # if someone wanted to know the variance from the standard series (only in !stats 6)
     if amount == 6:
         stdSeries = (15,14,13,12,10,8)
-        return outputStr,serie,sum(serie)-sum(stdSeries)
+        return outputStr, serie, sum(serie)-sum(stdSeries)
 
-    return outputStr,serie,None
+    return outputStr, serie, None
 
 def superstats() -> str:
     """Function that performs three times !stats, returning a fancy table to the user."""
