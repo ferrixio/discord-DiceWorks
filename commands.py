@@ -1,6 +1,5 @@
 from discord.ext import commands
-from random import randint
-from random import choice
+from random import randint, choice
 import diceBlock as DB
 from diceBlock import VARIABLES as var
 
@@ -101,10 +100,61 @@ async def jennystats(ctx, *arg):
     except Exception as e:
         await ctx.reply(e, mention_author=False)
 
+@commands.command(aliases=("png",))
+async def npc(ctx, *arg):
+    """Command to create a guild of a number of elements"""
+
+    try:
+        if not arg:
+            arg = '1'
+        guildMembers = int(''.join(arg))
+
+        if guildMembers > 10:
+            guildMembers = 10
+        elif guildMembers < 1:
+            guildMembers = 1
+
+        await ctx.reply(f"{ctx.message.author.global_name}'s random guild:")
+        for i in range(guildMembers):
+            outputStr = ''
+            # stats
+            _, statList, _ = DB.stats(6)
+
+            # race
+            dndRace = choice(list(var["dimension_table"]))
+            height, weight = DB.evaluateSize(var["dimension_table"][dndRace], dndRace)
+
+            # class & subclass
+            dndClass = choice(list(var["classes"]))
+            dndCriteria = list(var["class_score_rk"][dndClass])
+            dndSubClass = choice(list(var["subclasses"][dndClass]))
+
+            # assign stats
+            statsDict = DB.assignStats(statList, dndCriteria, dndSubClass, dndRace)
+            dict2str = ""
+            counter = 0
+            for k, v in statsDict.items():
+                dict2str += f"`{k}`:\t{v}\t{DB._getModifier([v])};\t"
+                counter += 1
+                if counter == 3:
+                    dict2str = dict2str[:-2]
+                    dict2str += '\n'
+                    counter = 0
+
+            # role
+            guildRole = choice(list(var["roles"]))
+
+            # build the final string
+            outputStr += f"Character {i+1}\nClass: {dndClass} ({dndSubClass})\tRole: {guildRole}\nRace: {dndRace} ({height} cm and {weight} kg)\n" + dict2str
+            await ctx.channel.send(f"```{outputStr}```")
+
+    except Exception as e:
+        await ctx.reply("Invalid input", mention_author=False)
+
 @commands.command(aliases=('character', 'char'))
 async def pg(ctx, *arg):
     """Generates a pg (statblock and sizes) according to dnd 5e"""
-    statBlock, statList, distance = DB.stats(6)  # generates the statblock in standard format
+    statBlock, _, distance = DB.stats(6)  # generates the statblock in standard format
     statText = '\n'.join(statBlock)
     parameters = DB.parseKwargs(set(arg))
     
@@ -174,7 +224,7 @@ async def superstats(ctx):
     """Command to roll 3 set of 6-stats simultaneously"""
     await ctx.channel.send(f"{ctx.message.author.global_name}'s superstats:\n{DB.superstats()}")
 
-@commands.command(aliases=('roll',))
+@commands.command(aliases=('roll','tiro'))
 async def tira(ctx, *arg):
     """Standard command to roll dice"""
     try:
@@ -349,7 +399,7 @@ async def fireball(ctx, *lv):
 
 # This method must be here. It adds the commands to the bot
 async def setup(bot):
-    CMD_LIST = (adv, cento, coin, dis, elvenchad, explode, forall, jennystats, pg, race, reset, stats,
+    CMD_LIST = (adv, cento, coin, dis, elvenchad, explode, forall, jennystats, npc, pg, race, reset, stats,
                 superstats, tira, tpc, ts)
     SPELL_LIST = (blast, chilltouch, firebolt, fireball, flame, guidingbolt, mock, wounds, shadowblade, sleep)
     

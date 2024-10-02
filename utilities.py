@@ -1,23 +1,9 @@
-from os import getenv
-from dotenv import load_dotenv
 from discord import Embed, ui, ButtonStyle, Interaction
 from discord.utils import get
 from diceBlock import VARIABLES as var
 
 ACQUA=0x1ABC9C      #Color verde-acqua
 
-load_dotenv()
-BOT = getenv('BOT')
-CHAT_T = getenv('chat_in_test')
-TEST = getenv('TEST_GIULD')
-DANIEL = getenv('DANIEL')
-FERRI = getenv('FERRI')
-OMAR = getenv('OMAR')
-LAPO = getenv('LAPO')
-VISCO = getenv('VISCO')
-CENTO = getenv('CENTO')
-
-nomi=(FERRI,CENTO,OMAR,LAPO,VISCO,DANIEL)
 copyright = "©"+var["copyright"]
 help_desc = var["help_description"]
 help_short = var["help_short"]
@@ -97,17 +83,6 @@ class ServerUtilities:
         em = Embed(title=f"Message from {name}", colour=ACQUA)
         em.add_field(name="", value=text)
         return em
-
-    def master(username:str,user_id:int) -> str:
-        """Helping function to message "master" (it's a pseudo-ping-pong command)"""
-
-        return 'Mio supremo creatore, sono al tuo servizio'*(str(user_id)==FERRI)+\
-            'Padroncino Omar, che cosa posso fare per te?'*(str(user_id)==OMAR)+\
-            'Lapo-sama, farò tutto ciò che desidera'*(str(user_id)==LAPO)+\
-            'Rusnejat caro, sono uscita dal Cubespace solo per te :heart:. In che modo posso esserti utile?'*(str(user_id)==CENTO)+\
-            'Visco-sensei, mi ha chiamato?'*(str(user_id)==VISCO)+\
-            'Daniel nya! Swono al tuwo sewizio UwU'*(str(user_id)==DANIEL)+\
-            (username+", sarò l'incarnazione della tua fortuna. !help per sapere cosa sono in grado di fare.")*(str(user_id) not in nomi)
     
     ### VOICE FUNCTIONS ###
     def is_connected(ctx) -> bool:

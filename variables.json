@@ -1,5 +1,5 @@
 {
-    "copyright":"Samuele Ferri 2024\t\t\t\t Bot version: 4.2.0",
+    "copyright":"Samuele Ferri 2024\t\t\t\t Bot version: 4.3.0",
 
     "help_description": "Type !help [command] for more info on a specific command; works also with a list of commands separated by a blank space.",
 
@@ -10,7 +10,7 @@
     "dic_global_help":{
         "standard":["tira", "tpc", "ts", "cento", "coin"],
         "advanced":["adv","dis","elvenchad","explode","forall","spell"],
-        "characters":["pg","race","stats","superstats", "jennystats"],
+        "characters":["npc","pg","race","stats","superstats", "jennystats"],
         "miscellaneous":["join","leave","member","ping","redo","reset"]
     },
 
@@ -27,6 +27,7 @@
         "join":"Let the bot joins the voice channel where you are connected into",
         "leave":"Disconnects the bot from voice channels",
         "member":"Sends as DM the number of member of this server; it doesn't count bots. Works only for admins",
+        "npc":"Create a group of lv 1 npc. It chooses randomly their class, subclass, role, race and statblock (they are distributed according to the 'standard' assegnation).\nThe syntax is **!npc n**, where _n = number of npcs_",
         "pg":"Creates a random character, selecting the race, the class, the sizes and its statblock.\nYou can add pairs 'key=value' to your message to set specific details during the creation (for example the race or the class). The available keys are **'level'**, **'race'** and **'class'**",
         "ping":"Shows the current bot latency",
         "race":"Generates race height and weight according to d&d 5e table. The syntax is **!race name**, where name is the race you have (in italian or english)",
@@ -47,11 +48,12 @@
         "dis":["svantaggio"],
         "explode":["lc"],
         "member":["membri", "members"],
+        "npc":["png"],
         "pg":["character", "char"],
         "race":["razza", "misure", "misura"],
         "redo":["ripeti", "again", "repeat"],
         "spell":["spells"],
-        "tira":["roll"],
+        "tira":["roll","tiro"],
         "tpc":["venti"]
     },
 
@@ -73,7 +75,6 @@
     "races":{
         "human": ["human", "umano"],
         "elf": ["elf", "elfo alto", "high elf"],
-        "drow": ["drow", "elfo scuro"],
         "wood elf": ["elfo dei boschi", "wood elf"],
         "halfling": ["halfling"],
         "hill dwarf": ["hill dwarf", "nano delle colline", "nano colline"],
@@ -85,8 +86,51 @@
         "tiefling": ["tiefling"]
     },
 
+    "race_score":{
+        "dragonborn":{
+            "STR":2,
+            "CHA":1
+        },
+        "mountain dwarf":{
+            "CON":2
+        },
+        "hill dwarf":{
+            "CON":2
+        },
+        "elf":{
+            "DEX":2
+        },
+        "wood elf":{
+            "DEX":2
+        },
+        "gnome":{
+            "INT":2
+        },
+        "halforc":{
+            "STR":2,
+            "CON":1
+        },
+        "halfelf":{
+            "CHA":2
+        },
+        "halfling":{
+            "DEX":2
+        },
+        "human":{
+            "STR":1,
+            "DEX":1,
+            "CON":1,
+            "INT":1,
+            "WIS":1,
+            "CHA":1
+        },
+        "tiefling":{
+            "CHA":2,
+            "INT":1
+        }
+    },
+
     "classes":{
-        "artificier": ["artificier", "artificiere"],
         "barbarian": ["barbarian", "barbaro"],
         "bard": ["bard", "bardo"],
         "cleric": ["cleric", "chierico"],
@@ -99,6 +143,51 @@
         "sorcerer": ["sorcerer", "stregone"],
         "warlock": ["warlock"],
         "wizard": ["wizard", "mago"]
+    },
+
+    "class_score_rk":{
+        "barbarian":["STR", "CON"],
+        "bard":["CHA", "DEX"],
+        "cleric":["WIS", "STR/CON"],
+        "druid":["WIS", "CON"],
+        "fighter":["STR/DEX", "CON", "INT"],
+        "monk":["DEX", "WIS"],
+        "paladin":["STR", "CHA"],
+        "ranger":["DEX", "WIS"],
+        "rogue":["DEX", "INT/CHA"],
+        "sorcerer":["CHA", "CON"],
+        "warlock":["CHA", "CON"],
+        "wizard":["INT", "CON/DEX"]
+    },
+
+    "subclasses":{
+        "barbarian":["berserker", "totem warrior"],
+        "bard":["lore", "valor"],
+        "cleric":["death", "knowledge", "life", "light", "nature", "tempest", "trickery", "war"],
+        "druid":["land", "moon"],
+        "fighter":["battle master", "champion", "eldritch knight"],
+        "monk":["four elements", "open hand", "shadow"],
+        "paladin":["ancients", "devotion", "oathbreaker", "vengeance"],
+        "ranger":["beast master", "hunter"],
+        "rogue":["arcane trickster", "assassin", "thief"],
+        "sorcerer":["draconic", "wild"],
+        "warlock":["archfey", "fiend", "great old one"],
+        "wizard":["abjuration", "conjuration", "divination", "enchantment", "evocation", "illusion", "necromancy", "transmutation"]
+    },
+
+    "roles":{
+        "barbarian":["defender", "striker"],
+        "bard":["controller", "face", "healer", "support", "utility caster"],
+        "cleric":["blaster", "defender", "healer", "striker", "support", "utility caster"],
+        "druid":["blaster", "controller", "healer", "support", "utility caster"],
+        "fighter":["defender", "striker"],
+        "monk":["scout", "striker"],
+        "paladin":["blaster", "defender", "face", "healer", "striker", "support"],
+        "ranger":["defender", "scout", "striker"],
+        "rogue":["face", "scout", "striker"],
+        "sorcerer":["blaster", "controller", "face", "striker", "support", "utility caster"],
+        "warlock":["blaster", "controller", "face", "striker"],
+        "wizard":["blaster", "controller", "scholar", "striker", "support", "utility caster"]
     },
 
     "spell_list":{

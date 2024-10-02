@@ -32,10 +32,6 @@ async def on_message(ctx):
     if ctx.author.id==int(getenv('BOT')):
         pass
 
-    if "master" in ctx.content or "Master" in ctx.content:
-        response=ServerUtilities.master(ctx.author.global_name,ctx.author.id)
-        await ctx.channel.send(response)
-
     #needs to make the bot realise that other commands may arrive
     await bot.process_commands(ctx)
 

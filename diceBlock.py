@@ -1,4 +1,4 @@
-from random import randint, choice
+from random import randint, choice, shuffle
 from json import load
 from math import floor
 from typing import Any
@@ -91,7 +91,7 @@ def check_roll(x:str, B:bool):
             if quantity>64:
                 #max number of dice rollable at the same moment.
                 #Notice that one can make multiple '64-rolls' and still get 1000 rolls in one command...
-                raise TypeError('I can roll al least 64 dice simultaneously')
+                raise TypeError('I can roll at most 64 dice simultaneously')
 
             die_amplitude = int(x[1])
             if die_amplitude > 256: #max amplitude of dice
@@ -355,7 +355,7 @@ def _buildSpellSentence(author:str, level:int, spellName:str, rolled:list[int], 
     return f"{author}'s level {level} {spellName}: `{rolled} -> {sum(rolled)} {dmgType}` {emoji}"    
 
 def _getModifier(numberList: list[int]) -> str:
-    """Function that writes the sign of a number string"""
+    """Function that writes the signed modifier of a number string"""
     modifier = floor((sum(numberList)-10)/2)
     return '+'*(modifier > 0) + str(modifier)
 
@@ -394,6 +394,42 @@ def _whileExplosion(L:int, amp:int) -> list[int]:
         listExplosions.append(randint(1,amp))
 
     return listExplosions
+
+def assignStats(statsList:list[int], criteria:list[str], subclass:str, race:str) -> dict:
+    """Assign the stats according to the class"""
+
+    stats = {"STR":0, "DEX":0, "CON": 0, "INT":0, "WIS":0, "CHA":0}
+    statsList.sort(reverse=True)
+
+    first_p = criteria[0]
+    if '/' in first_p:
+        first_p = choice(first_p.split("/"))
+
+    second_p = criteria[1]
+    if '/' in second_p:
+        second_p = choice(second_p.split('/'))
+    elif subclass == "arcane trickster":
+        second_p = "INT"
+
+    if subclass == "eldritch knight":
+        stats[criteria[2]] = statsList.pop(2)
+
+    # assign the first two stats (highest)
+    stats[first_p] = statsList.pop(0)
+    stats[second_p] = statsList.pop(1)
+
+    # assign the residual
+    shuffle(statsList)
+    for k in stats.keys():
+        if not stats[k]:
+            stats[k] = statsList.pop()
+
+    # fix the stats according to the race
+    for k, v in stats.items():
+        if k in VARIABLES["race_score"][race]:
+            v += VARIABLES["race_score"][race][k]
+
+    return stats
 
 def coerceSlotLevel(level:Any, base: int) -> int:
     """Coerces the level of the spell to the base value or castes it to int"""
