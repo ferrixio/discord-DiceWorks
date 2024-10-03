@@ -357,7 +357,7 @@ def _buildSpellSentence(author:str, level:int, spellName:str, rolled:list[int], 
 def _getModifier(numberList: list[int]) -> str:
     """Function that writes the signed modifier of a number string"""
     modifier = floor((sum(numberList)-10)/2)
-    return '+'*(modifier > 0) + str(modifier)
+    return '+'*(modifier >= 0) + str(modifier)
 
 def _getAP(job:str, level:int) -> int:
     """Returns the extra ability scores that the player has to add to the stats"""

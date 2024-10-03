@@ -134,7 +134,7 @@ async def npc(ctx, *arg):
             dict2str = ""
             counter = 0
             for k, v in statsDict.items():
-                dict2str += f"`{k}`:\t{v}\t{DB._getModifier([v])};\t"
+                dict2str += f"`{k}`:\t{str(0)*(v < 10)+str(v)}\t{DB._getModifier([v])};\t"
                 counter += 1
                 if counter == 3:
                     dict2str = dict2str[:-2]
@@ -142,10 +142,10 @@ async def npc(ctx, *arg):
                     counter = 0
 
             # role
-            guildRole = choice(list(var["roles"]))
+            guildRole = choice(list(var["roles"][dndClass]))
 
             # build the final string
-            outputStr += f"Character {i+1}\nClass: {dndClass} ({dndSubClass})\tRole: {guildRole}\nRace: {dndRace} ({height} cm and {weight} kg)\n" + dict2str
+            outputStr += f"Character {i+1}\nRace: {dndRace} ({height} cm and {weight} kg)\nClass: {dndClass} ({dndSubClass})\nRole: {guildRole}\n" + dict2str
             await ctx.channel.send(f"```{outputStr}```")
 
     except Exception as e:
