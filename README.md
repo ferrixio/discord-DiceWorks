@@ -5,6 +5,8 @@
 
 :star: Version 4.2.1
 
+:bar_chart: Status: closed
+
 ## Requirements
 
 Python 3.10 and Discord.py 2.3.1
